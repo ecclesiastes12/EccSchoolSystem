@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Home - Shopme Admin')"></head>
+<body>
+
+
+	<!-- fragment for menu bar -->
+	<div th:fragment="menu">
+		<!-- Hidden form for logout -->
+<!-- 		<form th:action="@{/logout}" method="post" name="logoutForm" th:hidden="true"> -->
+<!-- 			<input type="submit" /> -->
+<!-- 		</form> -->
+		<div class="wrapper">
+			<div th:replace="../fragments/menu_bar::header"></div>
+			<div class="row">
+	
+				<div th:replace="../fragments/sidebar::sidebar"></div>
+			</div>
+	
+			<!-- <div layout:fragment="content">
+			</div> -->
+	
+			<div th:replace="../fragments/menu_bar::footer"></div> 
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<sidebar th:fragment="sidebar">
+
+<div class="sidebar">
+	<div class="sidebar-menu">
+		<div class="profile">
+			<img src="images/spr.jpg" alt="">
+			<p>James</p>
+		</div>
+		<ul>
+			<li class="item"><a href="#" class="menu-btn"> <i
+					class="fas fa-desktop"></i><span>Dashboard</span>
+			</a></li>
+		</ul>
+		<ul>
+			<li class="item" id="staff"><a href="#staff"
+				class="menu-btn" id="dropdown4"> <i class="fas fa-cog"></i> <span>Human Resource
+						<i class="fas fa-chevron-down drop-down"></i>
+				</span>
+			</a>
+				<ul class="sub-menu" id="btn4">
+					<li><a th:href="@{/staffs}"><i class="fas fa-lock"></i><span>Staff Details</span></a>
+					</li>
+					<li><a th:href="@{/staffs/classTeacher}"><i class="fa fa-globe" aria-hidden="true"></i><span>Assign Class Teacher</span></a>
+					</li>
+					<li><a href="#"><i class="fas fa-lock"></i><span>Marks Register</span></a>
+					</li>
+					<li><a href="#"><i class="fa fa-globe" aria-hidden="true"></i><span>Marks Grade</span></a>
+					</li>
+
+				</ul></li>
+		</ul>
+		<ul>
+			<li class="item" id="profile"><a href="#profile"
+				class="menu-btn" id="dropdown1"> <i class="fas fa-user-circle"></i><span>Student
+						Information<i class="fas fa-chevron-down drop-down"></i>
+				</span>
+			</a>
+				<ul class="sub-menu" id="btn1">
+					<li><a href="#"><i class="fas fa-image"></i><span>Student
+								Details</span></a></li>
+					<li><a th:href="@{/students/new}"><i
+							class="fas fa-address-card"></i><span>Student Admission</span></a></li>
+					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
+								Report</span></a></li>
+					<li><a href="#"><i class="fas fa-address-card"></i><span>Guardian
+								Report</span></a></li>
+					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
+								History</span></a></li>
+					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
+								Login Credential</span></a></li>
+					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
+								Categories</span></a></li>
+					<li><a th:href="@{/schoolhouses}"><i class="fas fa-address-card"></i><span>Student
+								House</span></a></li>
+					<li><a href="#"><i class="fas fa-address-card"></i><span>Disabled
+								Students</span></a></li>
+				</ul></li>
+		</ul>
+		<ul>
+			<li class="item" id="message"><a href="#message"
+				class="menu-btn" id="dropdown2"> <i class="fas fa-envelope"></i>
+					<span>Acadamics <i class="fas fa-chevron-down drop-down"></i></span>
+			</a>
+				<ul class="sub-menu" id="btn2">
+					<li><a href="#"><i class="fas fa-envelope"></i><span>Class
+								Timetable</span></a></li>
+					<li><a th:href="@{/assignTeachers}"><i class="fas fa-envelope-square"></i><span>Assign
+								Class Teacher</span></a></li>
+					<li><a th:href="@{/assignSubjects}"><i class="fas fa-exclamation-circle"></i><span>Assign
+								Subject</span></a></li>
+					<li><a href="#"><i class="fas fa-exclamation-circle"></i><span>Promote
+								Students</span></a></li>
+					<li><a th:href="@{/subjects}"><i class="fas fa-exclamation-circle"></i><span>Subject</span></a>
+					</li>
+					<li><a th:href="@{/lecturerooms}"><i class="fas fa-exclamation-circle"></i><span>Class</span></a>
+					</li>
+					<li><a th:href="@{/sections}"><i class="fas fa-exclamation-circle"></i><span>Sections</span></a>
+					</li>
+				</ul></li>
+		</ul>
+		<ul>
+			<li class="item" id="settings"><a href="#settings"
+				class="menu-btn" id="dropdown3"> <i class="fas fa-cog"></i> <span>Examinations
+						<i class="fas fa-chevron-down drop-down"></i>
+				</span>
+			</a>
+				<ul class="sub-menu" id="btn3">
+					<li><a href="#"><i class="fas fa-lock"></i><span>Exam List</span></a>
+					</li>
+					<li><a href="#"><i class="fa fa-globe" aria-hidden="true"></i><span>Exam Schedule</span></a>
+					</li>
+					<li><a href="#"><i class="fas fa-lock"></i><span>Marks Register</span></a>
+					</li>
+					<li><a href="#"><i class="fa fa-globe" aria-hidden="true"></i><span>Marks Grade</span></a>
+					</li>
+
+				</ul></li>
+		</ul>
+		<ul>
+			<li class="item"><a href="#" class="menu-btn"> <i
+					class="fas fa-info-circle"><span>About</span></i>
+			</a></li>
+		</ul>
+	</div>
+</div>
+
+</sidebar>

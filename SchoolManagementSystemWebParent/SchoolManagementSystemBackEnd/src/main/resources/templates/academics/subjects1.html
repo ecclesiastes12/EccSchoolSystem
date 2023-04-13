@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout :: page_head('add subjects','none')">
+
+</head>
+<body>
+	<div layout:fragment="content" class="main-container">
+		<!-- NB every page needs this tag for to be able to display -->
+
+		<div class="text-center">
+			<h2>Score Form</h2>
+		</div>
+		<div class="text-right">
+			<button class="btn btn-success">
+				<a th:href="@{/listsubjects}">view scores</a>
+			</button>
+		</div>
+		
+		
+		
+		<div class="column">
+			<div class="row">
+					<div class="col-3">
+					<form method="post" th:object="${subjects}" th:action="@{/courses}">
+						<div class="card cardspace shadow p-3 mb-5 bg-white rounded" >
+
+							<div class="card cardbody">
+								<div class="form-row">
+									<div class="form-group col">
+										<label for="coursecode">Course Code</label> <input type="text"
+											class="form-control" id="coursecode" >
+										<div class="text text-danger"
+											
+											></div>
+									</div>
+									<div class="form-group col">
+										<label for="coursename">Course Name</label> <input type="text"
+											class="form-control" id="coursename"
+											>
+										<div class="text text-danger"
+											
+											></div>
+									</div>
+								</div>
+
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+
+						</div>
+						</form>
+					
+					</div>
+				
+				
+				<div class="col-9">
+					<div class="card cardspace shadow p-3 mb-5 bg-white rounded">
+						<form method="post" th:object="${subjects}"
+							th:action="@{/courses}">
+							<div class="card card-body">
+								<div class="form-row">
+									<div class="form-group col">
+										<label for="coursecode">Course Code</label> <input type="text"
+											class="form-control" id="coursecode">
+										<!-- <div class="text text-danger"
+										th:if="${#fields.hasErrors('coursecode')}"
+										th:errors="*{coursecode}"></div> -->
+									</div>
+									<div class="form-group col">
+										<input type="hidden" class="form-control" id="coursecode">
+										<button type="submit" class="btn btn-primary">Submit</button>
+
+										<!-- <div class="text text-danger"
+										th:if="${#fields.hasErrors('subjectname')}"
+										th:errors="*{subjectname}"></div> -->
+									</div>
+								</div>
+
+
+							</div>
+						</form>
+						
+						<div class="card card-body">
+							<!-- <div class="form-row">
+ -->
+							<table class="table table-hover table-bordered">
+								<tbody>
+								<thead>
+									<tr>
+
+										<th scope="col">Subject Code</th>
+										<th scope="col">Subject Name</th>
+
+										<th width="100px">Action</th>
+										
+									</tr>
+								</thead>
+								
+
+									<tr th:each="subject:${subjects}">
+										<td th:text="${subject.coursecode}"></td>
+										<td th:text="${subject.subjectname}"></td>
+										<td>
+											<div class="btn-group">
+												<a href="#"><span
+												class="btn btn-primary fa fa-edit">Edit</span></a>
+												<a href="#"><span
+												class="btn btn-primary fa fa-trash-alt">Delete</span></a>
+											</div>
+										</td>
+									</tr>
+
+
+
+								</tbody>
+							</table>
+
+
+							<!-- 	</div> -->
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+</body>
+</html>

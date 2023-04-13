@@ -1,0 +1,10 @@
+.border{
+	border-top: 2px solid red;
+}
+
+#rearrangeSection{
+	writing-mode: vertical-lr;
+	text-orientation:upright;
+	text-transformation: uppercase;
+	
+}

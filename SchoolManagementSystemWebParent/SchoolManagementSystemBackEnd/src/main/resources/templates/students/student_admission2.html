@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout :: page_head('staffs','none')">
+
+</head>
+<body>
+<div layout:fragment="content" class="main-container">
+
+	<div class="card cardspace">
+	<form th:action="@{/students/save}" th:object="${studentParentGuardianDTO}" method="post"
+	onsubmit="return checkStudentEmailUniqueness(this);">
+		<div class="shadow p-3 mb-4 bg-body rounded">
+			<div  class="bg-secondary">
+				<span class="fs-5 fw-5">Student Admission</span>
+				<button type="button" class="btn btn-secondary ">Import Student</button>
+			</div>
+			<div class="card card-body ">
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Admission Number</label>
+						
+							<input type="text"  class="form-control"
+								required="required">
+						
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">First Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{firstName}">
+						</div>
+					</div>
+					<div class="form-group col">
+						<label class="col-form-label">Other Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{otherName}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Last Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{lastName}">
+						</div>
+					</div>
+					
+					
+				</div>
+			
+			<div class="row ">
+					<div class="form-group col">
+						<label class="col-form-label">Class</label>
+						<select class="form-select" th:field="*{lectureRoom}">
+							<th:block  th:each="lec : ${listLectureRooms}">
+								<option th:value="${lec.id}">[[${lec.name}]]</option>
+							</th:block>
+						</select>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Section</label>
+						<select class="form-select" th:field="*{section}">
+							<th:block  th:each="csec : ${listSections}">
+								<option th:value="${csec.id}">[[${csec.name}]]</option>
+							</th:block>
+								
+						</select>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Gender</label>
+						<div class="row">
+							<div th:each="sex : ${T(com.sch.common.entity.Gender).values()}">
+							<div class="form-check ">
+								<input type="radio" th:field="*{gender}" th:value="${sex}" class="form-check-input">
+								<label class="form-check-label" th:for="${#ids.prev('gender')}" >[[${sex}]]</label>
+							</div>
+						</div>
+						</div>
+					</div>
+					<div class="form-group col">
+						<label class="col-form-label">Date of Birth</label>
+						<div class="">
+							<input type="date"  class="form-control"
+								th:field="*{getDobOnForm}">
+						</div>
+					</div>
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col-sm-2">
+						<label class="col-form-label">Category</label>
+						<select class="form-select" th:field="*{studentCategory}">
+								<option th:each="ssc: ${T(com.sch.common.entity.StudentCategory).values()}"
+							th:value="${ssc}" th:text="${ssc}">A</option>
+						</select>
+					</div>
+					
+					<div class="form-group col-sm-2">
+						<label class="col-form-label">Religion</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{religion}">
+						</div>
+					</div>
+					
+					<div class="form-group col-sm-2">
+						<label class="col-form-label">Caste</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{caste}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mobile Number</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{phoneNumber}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Email</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{email}">
+						</div>
+					</div>
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Admission Date</label>
+						<div class="">
+							<input type="date"  class="form-control"
+								th:field="*{getAdmissionDateOnForm}">
+						</div>
+					</div>
+					
+<!--					<div class="form-group col">-->
+<!--						<label class="col-form-label">Student Photo</label>-->
+<!--						<div class="">-->
+<!--							<input type="text"  class="form-control"-->
+<!--								required="required">-->
+<!--						</div>-->
+<!--					</div>-->
+					
+					<div class="form-group col">
+						<label class="col-form-label">Blood Group</label>
+						<select class="form-select" th:field="*{bloodGroup}">
+								<option th:each="bgsc: ${T(com.sch.common.entity.BloodGroup).values()}"
+							th:value="${bgsc}" th:text="${bgsc}"></option>
+						</select>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Student House</label>
+						
+						<select class="form-select" th:field="*{schoolHouse}">
+							<th:block  th:each="stdh : ${listSchoolHouses}">
+								<option th:value="${stdh.id}">[[${stdh.name}]]</option>
+							</th:block>
+								
+						</select>
+					</div>
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Height</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{height}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Weight</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{weight}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Registration Date</label>
+						<div class="">
+							<input type="date"  class="form-control"
+								th:field="*{getRegistrationDateOnForm}" >
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<div>
+							<a href="#" ><span class="fa-solid fa-plus pt-4 mt-4">Add Sibling</span></a>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			
+		
+		</div>
+	
+		<div class="shadow p-3 mb-4 bg-body rounded">
+			<div  class="bg-secondary">
+				<span class="fs-5 fw-5">Parent Guardian Detail</span>
+				
+			</div>
+			<div class="card card-body ">
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Father Name</label>
+						
+							<input type="text"  class="form-control"
+								th:field="*{fatherName}">
+						
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Father Phone</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{fatherPhoneNumber}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Father Occupation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{fatherOccupation}">
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group col"> -->
+<!-- 						<label class="col-form-label">Father photo</label> -->
+<!-- 						<div class=""> -->
+<!-- 						<input type="file"  class="form-control" -->
+<!-- 								id="formFile"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+			
+			<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mother Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{motherName}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mother Phone</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{motherPhoneNumber}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mother Occupation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{motherOccupation}">
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group col"> -->
+<!-- 						<label class="col-form-label">Mother Photo</label> -->
+<!-- 						<div class=""> -->
+<!-- 							<input type="file"  class="form-control" -->
+<!-- 								id="formFile"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label me-3">If Guardian is </label>
+						<div class="form-check form-check-inline">
+							<input type="radio"  class="form-check-input fatherRadio"
+								value="Father" th:field="*{isGuardianFatherMotherOther}">
+							<label class="form-check-label">Father</label>	
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="radio"  class="form-check-input motherRadio"
+								value="Mother" th:field="*{isGuardianFatherMotherOther}">
+							<label class="form-check-label">Mother</label>	
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="radio"  class="form-check-input otherRadio" 
+								value="Other" th:field="*{isGuardianFatherMotherOther}">
+							<label class="form-check-label">Other</label>	
+						</div>
+						
+					</div>
+					
+				</div>
+				
+				<div class="forRadio d-none">
+					<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianName}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Relation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianRelation}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Email</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianEmail}">
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group col"> -->
+<!-- 						<label class="col-form-label">Guardian Photo</label> -->
+<!-- 						<div class=""> -->
+<!-- 							<input type="file"  class="form-control" -->
+<!-- 								id="formFile"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Phone</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianPhoneNumber}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Occupation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianOccupation}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Address</label>
+						<div class="">
+							<textarea class="form-control"
+								th:field="*{guardianAddress}"></textarea>
+						</div>
+					</div>
+					
+					
+				</div>
+				
+				</div>
+			</div>
+			
+		
+		</div>
+		
+			<div class="text-center">
+				<button type="submit" class="btn btn-outline-primary">SAVE</button>
+			</div>
+		
+		</form>
+		<div th:replace="fragments :: modal_dialog"></div>
+	</div>
+	<script th:src="@{/js/common_modal.js}"></script>
+	<script>
+	
+	contextPath = "[[@{/}]]";
+	
+		//code to make COD button visible when radio button is checked
+		$(document).ready(function() {
+		
+			$(".fatherRadio").on("click", function(){
+				//removes the css class d-none to make the button visible
+				$(".forRadio").addClass("d-none");
+			});
+			$(".motherRadio").on("click", function(){
+				//removes the css class d-none to make the button visible
+				$(".forRadio").addClass("d-none");
+			});
+			$(".otherRadio").on("click", function(){
+				//removes the css class d-none to make the button visible
+				$(".forRadio").removeClass("d-none");
+			});
+			
+		});
+		
+		
+		function checkStudentEmailUniqueness(form){
+		
+			/*url of checkDuplicateEmail in the StudentRestController*/
+	 		url = contextPath + "students/check_unique_email"; 
+	 		//alert(url);
+	 		/*$("email") refers to the th:field value of the email field*/
+	 		
+	 		studentEmail = $("#email").val(); 
+	 		csrfValue = $("input[name='_csrf']").val();
+	 		params = {email: studentEmail, _csrf: csrfValue};
+	 		
+	 		$.post(url, params, function(response){
+	 			if(response == "OK"){
+	 				form.submit();
+	 			}else{
+ 				showModalDialog("Warning","There is an existing Student with the same email");
+ 				
+ 				
+ 			}
+ 		}).fail(function(){
+ 			showModalDialog("Error","Could not connect to the server");
+ 		});
+	 		return false;
+			
+		
+		}
+	
+	</script>
+	
+</div>
+</body>
+</html>

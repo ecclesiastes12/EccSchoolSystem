@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head
+	th:insert="../fragments/main_layout  :: page_head('Home - Shopme Admin','none')"></head>
+<body>
+	<div layout:fragment="content" class="main-container">
+		<!-- <div th:replace="navigation :: menu"></div> -->
+
+		<div class="card">
+			<div class="mt-1 mb-1">
+				<i class="fas fa-graduation-cap fa-1x"></i> <span
+					class="fs-5 fw-bold">Student Information</span>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<form th:action="@{/schoolhouses/save}" method="post"
+						style="max-width: 700px; margin: 0 auto;" th:object="${schoolHouse}">
+						<!-- hidden field for section id -->
+						<input type="hidden" th:field="*{id}" />
+
+						<div class="card">
+							<span class="fs-5 badge rounded-pill text-bg-info text-center text-wrap">Add School House</span>
+
+							<div class="form-group">
+								<label class="col-form-label">Name</label>
+								<div class="">
+									<input type="text" th:field="*{name}" class="form-control"
+										required="required">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-form-label">Description</label>
+								<div class="">
+									<input type="text" th:field="*{description}" class="form-control"
+										required="required">
+								</div>
+							</div>
+
+
+							<div>&nbsp;</div>
+							<div class="d-flex m-auto">
+								<button type="submit"
+									class="form-control text-nowrap btn btn-outline-success me-2">Save</button>
+									
+									<button th:unless="${id == null}"
+									type="button"
+									class="form-control text-nowrap btn btn-outline-success buttonCancel">Cancel</button>
+							</div>
+							
+						</div>
+					</form>
+				</div>
+
+				<div class="col-sm-8">
+					<div class="card">
+						<p class="fs-5 badge rounded-pill text-bg-info text-center text-wrap">Student House List</p>
+
+						<div class="full-details">
+							<table
+								class="table table-bordered table-striped table-hover table-responsive-xl-sm">
+								<thead class="thead-dark">
+									<tr>
+										<th class="hideable-column">ID</th>
+										<th class="hideable-column">Name</th>
+										<th class="hideable-column">Description</th>
+										<th class="hideable-column w-25">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="listHouse : ${listSchoolHouse}">
+										<td>[[${listHouse.id}]]</td>
+										<td>[[${listHouse.name}]]</td>
+										<td>[[${listHouse.description}]]</td>
+										<td>
+											<div>
+												<a class="btn btn-outline-success fa-solid fa-pen-to-square"
+													th:href="@{'/schoolhouses/edit/' + ${listHouse.id}}"></a>
+												&nbsp; <a
+													class="btn btn-outline-danger fa-solid fa-trash  link-delete"
+													th:href="@{'/schoolhouses/delete/' + ${listHouse.id}}"
+													th:entityId="${listHouse.id}"></a>
+											</div>
+
+
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<div th:insert="fragments :: toast_fragment"></div>
+			
+		</div>
+		
+		
+		
+
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+		
+		<script th:src="@{/js/common_list.js}"></script>
+		<!-- <script th:inline="javascript" th:src="@{/js/toastMessage.js}"></script> -->
+		
+	<script  th:inline="javascript" th:src="@{/js/toastMessage.js}"></script>
+
+		<script type="text/javascript">
+		moduleURL="[[@{/lecturerrooms}]]";
+	
+		$(document).ready(function(){
+			$(".link-edit").on("click", function (e) {
+				event.preventDefault();
+				linkDetailURL = $(this).attr("href");
+
+				//$("#editModal").show("show");
+				$("#editModal") //selects the modal dialog
+					.modal("show") //show the modal
+					.find(".modal-content") //finds the element modal-content
+					.load(linkDetailURL); //load the url for the selected customer
+			});
+			
+			
+			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				showDeleteConfirmModal($(this), 'School House');
+			});
+			
+			//for cancel button
+			$(".buttonCancel").on("click", function(){
+				window.location = "[[@{/schoolhouses}]]";
+			});
+		});
+	</script>
+
+	</div>
+</body>
+</html>

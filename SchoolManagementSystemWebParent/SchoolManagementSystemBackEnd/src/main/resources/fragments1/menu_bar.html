@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<body>
+
+		<header th:fragment="header">
+
+			<div class="header">
+				<div class="header-menu">
+					<div class="title">
+						Coding <span>Snow</span>
+					</div>
+					<div class="sidebar-btn">
+						<i class="fas fa-bars"></i>
+						<!--icon -->
+					</div>
+					<ul>
+						<li><a href="#"><i class="fas fa-search"></i></a></li>
+						<!--icon -->
+						<li><a href="#"><i class="fas fa-bell"></i></a></li>
+						<!--icon -->
+						<li><a href="#" data-toggle="modal"
+							data-target="#exampleModal"><i class="fas fa-power-off"></i></a></li>
+						<!--icon -->
+					</ul>
+				</div>
+
+			</div>
+		</header>
+
+		<div class="row">
+
+			<div th:replace="../fragments/sidebar::sidebar"></div>
+		</div>
+		<footer th:fragment="footer">
+			<div class="text text-center">
+				<p>EccTelInk &copy; 2021</p>
+
+			</div>
+
+		</footer>
+
+
+</body>
+</html>

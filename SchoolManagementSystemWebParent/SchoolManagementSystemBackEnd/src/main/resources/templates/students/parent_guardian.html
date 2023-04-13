@@ -1,0 +1,167 @@
+<div class="shadow p-3 mb-4 bg-body rounded">
+			<div  class="bg-secondary">
+				<span class="fs-5 fw-5">Parent Guardian Detail</span>
+				
+			</div>
+			<div class="card card-body ">
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Father Name</label>
+						
+							<input type="text"  class="form-control"
+								th:field="*{fatherName}">
+						
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Father Phone</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{fatherPhone}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Father Occupation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{fatherOccupation}">
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group col"> -->
+<!-- 						<label class="col-form-label">Father photo</label> -->
+<!-- 						<div class=""> -->
+<!-- 						<input type="file"  class="form-control" -->
+<!-- 								id="formFile"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+			
+			<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mother Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{motherName}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mother Phone</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{motherPhone}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Mother Occupation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{motherOccupation}">
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group col"> -->
+<!-- 						<label class="col-form-label">Mother Photo</label> -->
+<!-- 						<div class=""> -->
+<!-- 							<input type="file"  class="form-control" -->
+<!-- 								id="formFile"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label me-3">If Guardian is </label>
+						<div class="form-check form-check-inline">
+							<input type="radio"  class="form-check-input"
+								th:value="${Father}" th:field="*{isGuardianFatherMotherOther}">
+							<label class="form-check-label">Father</label>	
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="radio"  class="form-check-input"
+								th:value="${Mother}" th:field="*{isGuardianFatherMotherOther}">
+							<label class="form-check-label">Mother</label>	
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="radio"  class="form-check-input"
+								th:value="${Other}" th:field="*{isGuardianFatherMotherOther}">
+							<label class="form-check-label">Other</label>	
+						</div>
+						
+					</div>
+					
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Name</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianName}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Relation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianRelation}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Email</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianEmail}">
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group col"> -->
+<!-- 						<label class="col-form-label">Guardian Photo</label> -->
+<!-- 						<div class=""> -->
+<!-- 							<input type="file"  class="form-control" -->
+<!-- 								id="formFile"> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+				</div>
+				
+				<div class="row ">
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Phone</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianPhone}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Occupation</label>
+						<div class="">
+							<input type="text"  class="form-control"
+								th:field="*{guardianOccupation}">
+						</div>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Address</label>
+						<div class="">
+							<textarea class="form-control"
+								th:field="*{guardianAddress}"></textarea>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+			
+		
+		</div>

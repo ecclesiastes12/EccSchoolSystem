@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head
+	th:insert="../fragments/main_layout  :: page_head('Home - Shopme Admin','none')"></head>
+<body>
+	<div layout:fragment="content" class="main-container">
+		<!-- <div th:replace="navigation :: menu"></div> -->
+
+		<div class="card">
+			<div class="mt-1 mb-1">
+				<i class="fas fa-graduation-cap fa-1x"></i> <span
+					class="fs-5 fw-bold">Academics</span>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<form th:action="@{/sections/save}" method="post"
+						style="max-width: 700px; margin: 0 auto;" th:object="${section}">
+						<!-- hidden field for section id -->
+						<input type="hidden" th:field="*{id}" />
+
+						<div class="card">
+							<span class="fs-5 badge rounded-pill text-bg-info text-center text-wrap">Add Section</span>
+
+							<div class="form-group">
+								<label class="col-form-label">Class</label>
+								<div class="">
+									<input type="text" th:field="*{name}" class="form-control"
+										required="required">
+								</div>
+							</div>
+
+
+							<div>&nbsp;</div>
+							<div class="col-sm-4 m-auto">
+								<button type="submit"
+									class="form-control text-nowrap btn btn-secondary">Save</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="col-sm-8">
+					<div class="card">
+						<p class="fs-5 badge rounded-pill text-bg-info text-center text-wrap">Section List</p>
+
+						<div class="full-details">
+							<table
+								class="table table-bordered table-striped table-hover table-responsive-xl-sm">
+								<thead class="thead-dark">
+									<tr>
+										<th class="hideable-column">ID</th>
+										<th class="hideable-column">Name</th>
+										<th class="hideable-column w-25">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="section : ${listSections}">
+										<td>[[${section.id}]]</td>
+										<td>[[${section.name}]]</td>
+
+										<td>
+											<div>
+												<a class="btn btn-success fa-solid fa-pen-to-square"
+													th:href="@{'/sections/edit/' + ${section.id}}"></a>
+												&nbsp; <a
+													class="btn btn-danger fa-solid fa-trash  link-delete"
+													th:href="@{'/sections/delete/' + ${section.id}}"
+													th:lectureId="${section.id}"></a>
+											</div>
+
+
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<div th:insert="fragments :: toast_fragment"></div>
+			
+		</div>
+		
+		
+		
+
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+		
+		<script th:src="@{/js/common_list.js}"></script>
+		<!-- <script th:inline="javascript" th:src="@{/js/toastMessage.js}"></script> -->
+		
+	<script  th:inline="javascript" th:src="@{/js/toastMessage.js}"></script>
+
+		<script type="text/javascript">
+
+	
+		$(document).ready(function(){
+			$(".link-edit").on("click", function (e) {
+				event.preventDefault();
+				linkDetailURL = $(this).attr("href");
+
+				//$("#editModal").show("show");
+				$("#editModal") //selects the modal dialog
+					.modal("show") //show the modal
+					.find(".modal-content") //finds the element modal-content
+					.load(linkDetailURL); //load the url for the selected customer
+			});
+			
+			
+			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				//alert($(this).attr("href"));
+				link = $(this);
+				lectureId = link.attr("lectureId");
+				$("#yesButton").attr("href", link.attr("href"))
+				$("#confirmText").text("Are you sure you want to delete this classroom ID " + lectureId + " ?");
+				$("#confirmModal") //selects the modal dialog
+				.modal("show"); //show the modal
+				
+			});
+		});
+	</script>
+
+	</div>
+</body>
+</html>

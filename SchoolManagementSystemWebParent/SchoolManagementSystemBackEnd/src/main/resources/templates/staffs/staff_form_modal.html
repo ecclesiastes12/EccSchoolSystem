@@ -1,0 +1,114 @@
+
+<!-- Modal -->
+
+	<div class="modal-header p-3">
+		<h5 class="modal-title text-center"><b>[[${pageTitle}]] Staff</b></h5>
+		<button type="button" class="btn-close" data-bs-dismiss="modal"
+			aria-label="Close">	
+		</button>
+	</div>
+		<div class=" mt-2">
+			<form th:action="@{/staffs/save}" method="post" style="max-width: 700px; margin: 0 auto;"
+				th:object="${staff}">
+				<input type="hidden" th:field="*{id}">
+				<div class="card">
+				<div class="border border-secondary rounded p-3">
+			
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">First Name:</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{firstName}" required="required" minlength="2" maxlength="45">
+				</div>
+			</div>
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">Last Name:</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{lastName}" required="required" minlength="2" maxlength="45">
+				</div>
+			</div>
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">Other Name:</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{otherName}"  minlength="2" maxlength="45">
+				</div>
+			</div>
+			
+<!-- 			<div class="form-group row mt-2"> -->
+<!-- 				<label class="col-sm-4 col-form-label">Gender:</label> -->
+<!-- 				<div class="col-sm-8"> -->
+<!-- 					<div th:each="sex : ${T(com.sms.common.entity.Gender).values()}"> -->
+<!-- 						<div class="custom-control custom-radio custom-control-inline"> -->
+<!-- 							<input type="radio" th:field="*{gender}" th:value="${sex}" class="custom-control-input"> -->
+<!-- 							<label class="custom-control-label" th:for="${#ids.prev('gender')}" th:text="${sex}"></label> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">Gender:</label>
+				<div class="col-sm-8">
+					<div th:each="sex : ${T(com.sch.common.entity.Gender).values()}">
+						<div class="form-check form-check-inline">
+							<input type="radio" th:field="*{gender}" th:value="${sex}" class="form-check-input">
+							<label class="form-check-label" th:for="${#ids.prev('gender')}" >[[${sex}]]</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">Email:</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{email}" required="required" minlength="2" maxlength="45">
+				</div>
+			</div>
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">Password:</label>
+				<div class="col-sm-8">
+				<!-- if user id is null meaning new user is being created and thus this field is required 
+				and the form is in the create new user mode-->
+					<input th:if="${staff.id == null}" type="password" class="form-control" th:field="*{password}" required="required" minlength="8" maxlength="20">
+				
+				<!-- if the user id is not null it means the form is in the edit mode and therefore this field is not required -->
+					<input th:if="${staff.id != null}" type="password" class="form-control" th:field="*{password}" minlength="8" maxlength="20" placeholder="(optional) change password or maintain the old password">
+				
+				</div>
+			</div>
+			<div class="form-group row mt-2">
+				<label class="col-sm-4 col-form-label">Qualification:</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{qualification}" >
+				</div>
+			</div>
+			
+			<div th:if="${staff.id != null}" class="form-group row mt-2 " id="dropdownStaffCategory">
+				<label class="col-sm-4 col-form-label">Category:</label>
+				<div class="col-sm-8">
+					<select class="form-control form-select" th:field="*{staffCategory}">
+							<option th:each="sc: ${T(com.sch.common.entity.StaffCategory).values()}"
+							th:value="${sc}" th:text="${sc}"></option>
+					</select>
+				</div>
+			</div>
+			
+			
+			
+			
+			
+			<div class="text-center">
+				<input type="submit" value="Save" class="btn btn-primary m-3">
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+					
+				</div>
+			</form>
+		</div>
+	
+
+
+
+
+
+

@@ -1,0 +1,144 @@
+<header th:fragment="header">
+
+	<div class="header">
+		<div class="header-menu">
+			<div class="logo">
+				<img alt="ecc logo" src="img/ecclogo.jpeg" style="height: 50px;">
+			</div>
+			<div class="title">
+				Ecc <span>School System</span>
+			</div>
+			<div class="sidebar-btn">
+				<i class="fas fa-bars"></i>
+				<!--icon -->
+			</div>
+			<ul>
+				<li><a href="#"><i class="fas fa-search"></i></a></li>
+				<!--icon -->
+				<li><a href="#"><i class="fas fa-bell"></i></a></li>
+				<!--icon -->
+				<li><a href="#" data-toggle="modal" data-target="#sLogin"><i
+						class="fas fa-power-off"></i></a></li>
+				<!--icon -->
+			</ul>
+		</div>
+
+	</div>
+
+	<div class="modal fade" id="sLogin" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog  modal-lg modal-xl">
+			<div class="modal-content">
+			
+				<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+							<div class="container">
+								<div class="forms-container">
+									<div class="signin-signup">
+<!-- 										<form class="sign-in-form" th:action="@{/index/registration}" -->
+<!-- 											method="post"> -->
+<!-- 											<h2 class="title">Sign in</h2> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-user"></i> <input type="text" -->
+<!-- 													placeholder="Username"> -->
+<!-- 											</div> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-lock"></i> <input type="text" -->
+<!-- 													placeholder="Password"> -->
+<!-- 											</div> -->
+<!-- 											<input type="submit" value="Login" class="btn1"> -->
+
+<!-- 											<p class="social-text">Or Sign in with social platforms</p> -->
+<!-- 											<div class="social-media"> -->
+<!-- 												<a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-facebook"></i> -->
+<!-- 												</a> <a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-twitter"></i> -->
+<!-- 												</a> <a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-google"></i> -->
+<!-- 												</a> <a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-linkedin-in"></i> -->
+<!-- 												</a> -->
+<!-- 											</div> -->
+<!-- 										</form> -->
+
+<!-- 										<form class="sign-up-form" action="index.html" method="post" -->
+<!-- 										th:object="${user}"> -->
+<!-- 											<h2 class="title">Sign up</h2> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-user"></i> <input type="text" -->
+<!-- 													placeholder="First name" th:field="*{firstName}"> -->
+<!-- 											</div> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-user"></i> <input type="text" -->
+<!-- 													placeholder="Last name" th:field="*{lastName}"> -->
+<!-- 											</div> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-user"></i> <input type="text" -->
+<!-- 													placeholder="Username" th:field="*{userName}"> -->
+<!-- 											</div> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-envelope"></i> <input type="text" -->
+<!-- 													placeholder="Email" th:field="*{email}"> -->
+<!-- 											</div> -->
+<!-- 											<div class="input-field"> -->
+<!-- 												<i class="fas fa-lock"></i> <input type="text" -->
+<!-- 													placeholder="Password" th:field="*{password}"> -->
+<!-- 											</div> -->
+<!-- 											<input type="submit" value="Sign up" -->
+<!-- 												class="btn1"> -->
+
+<!-- 											<p class="social-text">Or Sign up with social platforms</p> -->
+<!-- 											<div class="social-media"> -->
+<!-- 												<a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-facebook"></i> -->
+<!-- 												</a> <a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-twitter"></i> -->
+<!-- 												</a> <a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-google"></i> -->
+<!-- 												</a> <a href="#" class="social-icon"> <i -->
+<!-- 													class="fab fa-linkedin-in"></i> -->
+<!-- 												</a> -->
+<!-- 											</div> -->
+<!-- 										</form> -->
+
+									</div>
+								</div>
+								<div class="panels-container">
+									<div class="panel left-panel">
+										<div class="content">
+											<h3>New here ?</h3>
+											<p>Welcome to ecctel.ink before you perform any
+												transaction please sign up to make things easy for us. Thank
+												you.</p>
+											<button type="button" name="button" class="btn1 transparent"
+												id="sign-up-btn">Sign up</button>
+										</div>
+										<img th:src="@{img/log.svg}" alt="" class="image">
+									</div>
+									<div class="panel right-panel">
+										<div class="content">
+											<h3>One of us ?</h3>
+											<p>Welcome to ecctel.ink before you perform any
+												transaction please sign up to make things easy for us. Thank
+												you.</p>
+											<button type="button" name="button" class="btn1 transparent"
+												id="sign-in-btn">Sign in</button>
+										</div>
+										<img th:src="@{img/register.svg}" alt="" class="image">
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+
+				</div>
+
+			</div>
+		</div>
+
+</header>

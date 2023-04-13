@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout  :: page_head('Home - Shopme Admin','none')"></head>
+<body>
+<div layout:fragment="content" class="main-container">
+	<!-- <div th:replace="navigation :: menu"></div> -->
+	
+	<div class="card">
+		<div class="mt-1 mb-1">
+			<i class="fas fa-graduation-cap fa-1x"></i>
+			<span class="fs-5 fw-bold">Academics</span>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+				<form th:action="@{staffs/classTeacher/save}" method="post" style="max-width: 700px; margin: 0 auto;" 
+					th:object="${teacherLectureHall}">
+					
+					<div class="card">
+						<span class="fs-5">Assign Class Teacher</span>
+						
+						<div class="form-group mt-2">
+						<label class="col-form-label">Class</label>
+						
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<label class="input-group-text">Select</label>
+								</div>
+								<select class="custom-select form-select" name="selectTeacher" th:field="*{classRoom}">
+									<option selected value="">A Class</option>
+									<th:block th:each="lectureHall : ${listLectureHalls}">
+										<option th:value="${lectureHall.id}" >[[${lectureHall.name}]]</option>
+									</th:block>
+								</select>
+							</div>
+						
+						</div>
+						
+						<div class="form-group mt-2">
+							<label class="col-form-label">Section</label>
+							
+									<div class="input-group">
+									<div class="input-group-prepend">
+										<label class="input-group-text">Select</label>
+									</div>
+									<select class="custom-select form-select" name="selectTeacher">
+										<option selected >A Section</option>
+										<th:block th:each="classSection : ${listClassSections}">
+											<option th:value="${classSection.id}">[[${classSection.name}]]</option>
+										</th:block>
+									</select>
+								</div>
+							
+						</div>
+						<div class="form-group mt-2">
+						<label class="col-form-label">Class Teacher</label>
+						<div class="col-sm-8">
+							<th:block th:each="teacher : ${listTeachers}">
+								<input type="checkbox" th:field="*{classTeacher}"
+									th:text="${teacher.getFullName}"
+									th:value="${teacher.id}"
+									class="m-2"
+								>
+								<br>
+							</th:block>
+						</div>
+						</div>
+						<div>&nbsp;</div>
+						<div class="col-sm-4 m-auto">
+							<button type="submit" class="form-control text-nowrap btn btn-secondary">Save</button>
+						</div>
+					</div>
+				</form>
+		</div>
+		
+		<div class="col-sm-8">
+			<div class="card">
+				<p class="fs-5 ">Class Teacher List</p>
+				<div class="row">
+					<div class="col-sm-8">
+						
+						<form>
+						    <div class="mb-3 row">
+							    <span>Search</span>
+							    
+							  </div>
+							  <div class="row">
+							  	<div class="col-sm-8">
+							  	 <input type="text" class="form-control" placeholder="search">
+							  	</div>
+							  	
+							    <div class="col-sm-4">
+							     	<button type="submit" class="btn btn-primary mb-3"><i class="fas fa-search"></i></button>
+							    </div>
+							   
+							  </div>
+						  
+						</form> 
+					</div>
+					<div class="col-sm-4">
+					<div>&nbsp; &nbsp;</div>
+						<div class="row">
+							<div class="pt-4 ">
+								<i class="fas fa-print fa-2x"></i>
+								<i class="fas fa-copy fa-2x"></i>
+								<i class="fas fa-file-excel fa-2x"></i>
+							</div>
+								
+						</div>
+					</div>
+				</div>
+				<div class="full-details">
+					<table class="table table-bordered table-striped table-hover table-responsive-xl-sm">
+						<thead class="thead-dark">
+							<tr>
+								<th class="hideable-column">Class</th>
+								<th class="hideable-column">Section</th>
+								<th class="hideable-column">Class Teacher</th>
+								<th class="hideable-column w-25">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="classTeacher : ${classTeachers}">
+							
+								<td>[[${classTeacher.id}]]</td>
+								<!-- double brackets removes the  -->
+<!-- 								<td th:text="${#strings.replace(listLectureHall.sections,',','')}"> -->
+								<td>	
+								<!-- [[${{listLectureHall.sections}}]] -->
+								
+								</td>
+
+								<td>
+									<div><a class="fas fa-edit fa-2x link-edit " 
+									th:href="@{'/classrooms/edit/' + ${classTeacher.id}}"
+									
+									></a>
+									&nbsp;
+									<a class="fas fa-trash fa-2x link-delete"
+										th:href="@{'/classrooms/delete/' + ${classTeacher.id}}"
+										th:lectureId="${classTeacher.id}"></a></div>
+									
+									<!--
+										
+										<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})"></div>
+									<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)"></div>
+									 -->
+								</td>	
+							</tr>
+						
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+	
+<!-- 	<div class="modal fade" id="editModalDialog"> -->
+<!-- 	  <div class="modal-dialog modal-lg"> -->
+<!-- 	    <div class="modal-content"> -->
+<!-- 	      ... -->
+<!-- 	    </div> -->
+<!-- 	  </div> -->
+<!-- 	</div> -->
+
+<!-- <div th:replace="academics/lecture_hall_modal :: editClass_modal"></div> -->
+
+<div class="modal fade" id="editModal">
+	<!-- modal-xl indicate extra-large modal dialog -->
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content"></div>
+	</div>
+</div>
+
+<!-- <div th:replace="modal_fragments :: confirm_modal"></div> -->
+
+<div class="modal fade text-center" id="confirmModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" >Delete Confirmation</h4>
+				<button type="button" data-bs-dismiss="modal"
+					aria-label="Close">&times;</button>
+			</div>
+			<div class="modal-body">
+				<span id="confirmText">Are you sure you want to delete "</span>
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-success" href="" id="yesButton">Yes</a>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+
+	
+		$(document).ready(function(){
+			$(".link-edit").on("click", function (e) {
+				event.preventDefault();
+				linkDetailURL = $(this).attr("href");
+
+				//$("#editModal").show("show");
+				$("#editModal") //selects the modal dialog
+					.modal("show") //show the modal
+					.find(".modal-content") //finds the element modal-content
+					.load(linkDetailURL); //load the url for the selected customer
+			});
+			
+			
+			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				//alert($(this).attr("href"));
+				link = $(this);
+				lectureId = link.attr("lectureId");
+				$("#yesButton").attr("href", link.attr("href"))
+				$("#confirmText").text("Are you sure you want to delete this classroom ID " + lectureId + " ?");
+				$("#confirmModal") //selects the modal dialog
+				.modal("show"); //show the modal
+				
+			});
+		});
+	</script>
+</div>
+</body>
+</html>

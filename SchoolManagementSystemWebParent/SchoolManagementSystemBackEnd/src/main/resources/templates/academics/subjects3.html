@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout :: page_head('subjects','none')">
+<body>
+
+<div layout:fragment="content" class="main-container">
+
+	<div class="card cardspace">
+	
+		<div>
+			<a type="button" class="btn btn-primary fa-solid fa-user-plus link-add-subject mb-2"
+				th:href="@{/subjects/new}">Add</a>
+		</div>
+		
+		<div class="card card-body">
+			<form action="">
+				<div class="row ms-auto">
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label for="coursecode">Course Code</label> <input type="search"
+								class="form-control" id="coursecode">
+						</div>
+					</div>
+					<div class="form-group col-sm-4 pt-3">
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		
+		<div class="card card-body">
+		<table class="table table-bordered table-striped table-hover table-responsive-sm align-middle" id="tableRefresh">
+			<thead class="table-dark text-center">
+				<tr>
+				<th scope="col">Subject Code</th>
+				<th scope="col">Subject Name</th>
+
+				<th width="50px">Edit</th>
+				<th width="50px">Delete</th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="sbj:${listSubjects}">
+					<td th:text="${sbj.code}"></td>
+					<td th:text="${sbj.name}"></td>
+					<td><a th:href="@{'/subjects/edit/' + ${sbj.id}}" 
+						class="btn btn-success fa-solid fa-pen-to-square link-edit"></a></td>
+					
+					<td><a th:href="@{'/subjects/delete/' + ${sbj.id}}"
+							class="btn btn-danger fa fa-trash-alt link-delete"
+							th:entityId="${sbj.id}"
+							th:title="'Delete this subject'"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	
+		<div class="modal fade" id="subjectModal">
+			<!-- modal-xl indicate extra-large modal dialog -->
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content"></div>
+			</div>
+		</div>
+		
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+		
+		<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+		contextPath = "[[@{/}]]";
+			$(document).ready(function() {
+				requestURL = contextPath + "subjects/save";
+				
+				showSubjectModalForm(".link-add-subject","#subjectModal");
+				showSubjectModalForm(".link-edit","#subjectModal");
+				
+				$("#saveButton").on("click", function(e) {
+					e.preventDefault();
+					submitFormNew();
+					
+					
+				});
+				
+				
+				
+				//for delete button
+				$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				//alert($(this).attr("href"));
+				link = $(this);
+				
+				showDeleteConfirmModal(link, 'subject');
+				
+			});
+				
+			});
+
+			function submitFormNew() {	
+				//name = $("input[name='name']").val();
+				//code = $("input[name='code']").val();
+				//requestData = {name : name,code : code}
+				
+				name = $("#name").val();
+				code = $("#code").val();
+				requestData = {"name" : name, "code" : code}
+				
+				$.ajax({
+					type :  "POST",
+					url : requestURL,
+					data : requestData,
+					
+					success : function(response) {
+					$("#subjectModal").modal("hide");
+					console.log(response);
+					}
+				});
+			
+			};
+			
+			
+			//function for add and edit subject button
+			function showSubjectModalForm(btnLink,modalLinkId){
+			$(btnLink).on("click", function (e) {
+				
+				event.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				
+				//alert(linkDetailURL);
+				
+			$(modalLinkId) //selects the modal dialog
+					.modal("show") //show the modal
+					.find(".modal-content") //finds the element modal-content
+					.load(linkDetailURL); //load the url for the selected subject
+			});
+			
+		}
+	</script>
+</div>
+</body>
+</html>

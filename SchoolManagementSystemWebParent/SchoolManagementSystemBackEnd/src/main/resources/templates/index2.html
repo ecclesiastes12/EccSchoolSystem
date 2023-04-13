@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+      <!-- The header has been moved to fragments.html -->
+<!-- <head th:replace="fragments :: page_head('Home - Shopme Admin')"></head> -->
+<head th:replace="fragments :: page_head('Home - Shopme Admin','none')"></head>
+<body>
+
+<div  class="main-container">
+<!-- <div th:replace="navigation :: menu"></div> -->
+<div class="wrapper">
+<div th:replace="fragments :: header"></div>
+<div th:replace="../fragments/sidebar::sidebar"></div>
+	
+	<div th:insert="fragments::content">
+	<div class="card">
+			<p>
+				We would like to thank you for purchasing Smart School! We are very pleased you have chosen Smart School for your institution, you will not be disappointed! Before you get started, please be sure to always check out these documentation files. We outline all kinds of good information, and provide you with all the details you need to use Smart School. Smart School can be used with any school, college, university, training/coaching institute.
+
+				If you are unable to find your answer here in our documentation, watch our Video Tutorials, you can also visit our Help & Support. Chances are your question or issue have been brought up already and the answer is waiting to be found. If you are unable to find it anywhere, then please go our Support section and open a new Support Ticket with all the details we need. Please be sure to include your site URL as well. Thank you, we hope you enjoy using Smart School!
+			</p>
+		</div>
+		
+		<div class="card">
+			<p>
+				We would like to thank you for purchasing Smart School! We are very pleased you have chosen Smart School for your institution, you will not be disappointed! Before you get started, please be sure to always check out these documentation files. We outline all kinds of good information, and provide you with all the details you need to use Smart School. Smart School can be used with any school, college, university, training/coaching institute.
+
+				If you are unable to find your answer here in our documentation, watch our Video Tutorials, you can also visit our Help & Support. Chances are your question or issue have been brought up already and the answer is waiting to be found. If you are unable to find it anywhere, then please go our Support section and open a new Support Ticket with all the details we need. Please be sure to include your site URL as well. Thank you, we hope you enjoy using Smart School!
+			</p>
+		</div>
+		<div class="card">
+			<p>
+				We would like to thank you for purchasing Smart School! We are very pleased you have chosen Smart School for your institution, you will not be disappointed! Before you get started, please be sure to always check out these documentation files. We outline all kinds of good information, and provide you with all the details you need to use Smart School. Smart School can be used with any school, college, university, training/coaching institute.
+
+				If you are unable to find your answer here in our documentation, watch our Video Tutorials, you can also visit our Help  Support. Chances are your question or issue have been brought up already and the answer is waiting to be found. If you are unable to find it anywhere, then please go our Support section and open a new Support Ticket with all the details we need. Please be sure to include your site URL as well. Thank you, we hope you enjoy using Smart School!
+			</p>
+		</div>
+	
+	</div>
+	
+		
+</div>	
+ </div>
+
+</body>
+</html>

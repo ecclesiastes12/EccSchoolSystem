@@ -1,0 +1,71 @@
+
+<!-- Modal -->
+
+	<div class="modal-header p-3">
+		<h5 class="modal-title text-center"><b>[[${pageTitle}]] Class Teacher</b></h5>
+		<button type="button" class="btn-close" data-bs-dismiss="modal"
+			aria-label="Close">	
+		</button>
+	</div>
+		<div class=" mt-2">
+			<form th:action="@{/assignTeachers/save}" method="post" style="max-width: 700px; margin: 0 auto;"
+				th:object="${classTeacherObject}">
+				<input type="hidden" th:field="*{id}"> 
+				<div class="card">
+				<div class="border border-secondary rounded p-3">
+			
+			<div class="form-group row mt-2 " >
+				<label class="col-sm-4 col-form-label">Select Class:</label>
+				<div class="col-sm-8">
+					<select class="form-control form-select" th:field="*{lectureRoom}">
+							<option th:each="lecRooms: ${listLectureRooms}"
+							th:value="${lecRooms.id}" th:text="${lecRooms.name}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group row mt-2 " >
+				<label class="col-sm-4 col-form-label">Select Section:</label>
+				<div class="col-sm-8">
+					<select class="form-control form-select" th:field="*{section}">
+							<option th:each="lsec: ${listSections}"
+							th:value="${lsec.id}" th:text="${lsec.name}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label  class="col-sm-4 col-form-label">Select Class Teacher</label>
+				
+				<div>
+					<th:block th:each="stf : ${listStaff}">
+					<input type="checkbox" th:field="*{staff}"
+							th:text="${stf.fullName}"
+							th:value="${stf.id}"
+							class="m-2"
+						>
+						
+				</th:block>
+				</div>
+				
+			</div>
+			
+			
+			
+			
+			<div class="text-center">
+				<input type="submit" value="Save" class="btn btn-primary m-3">
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+					
+				</div>
+			</form>
+		</div>
+	
+
+
+
+
+
+

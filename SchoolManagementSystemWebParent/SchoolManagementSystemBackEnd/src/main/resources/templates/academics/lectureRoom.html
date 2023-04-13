@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	 xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout  :: page_head('Home - Shopme Admin','none')"></head>
+<body>
+<div layout:fragment="content" class="main-container">
+	<!-- <div th:replace="navigation :: menu"></div> -->
+	
+	<div class="card">
+		<div class="mt-1 mb-1">
+			<i class="fas fa-graduation-cap fa-1x"></i>
+			<span class="fs-5 fw-bold ">Academics</span>
+		</div>
+		<div class="row">
+			<div class="col-sm-4">
+			
+				<form th:action="@{/lecturerooms/save}" method="post" style="max-width: 700px; margin: 0 auto;"
+				th:object="${lectureroom}">
+					
+					<div class="card">
+						<div><span class="fs-5 badge rounded-pill text-bg-info text-center text-wrap">[[${pageTitle}]] Lecture Room</span></div>
+						
+						<input type="hidden" th:field="*{id}" />
+						
+						<div class="form-group">
+						<label class="col-form-label">Lecture Room</label>
+						<div class="">
+							<input type="text" th:field="*{name}" class="form-control"  required="required" minlength="2" maxlength="45">
+						</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-form-label">Section</label>
+							<div class="col-sm-8">
+									<th:block th:each="section : ${listSectionWithSort}">
+										<input type="checkbox" th:field="*{sections}"
+											th:text="${section.name}"
+											th:value="${section.id}"
+											class="m-2"
+										>
+										<br>
+									</th:block>
+							</div>
+						</div>
+						<div>&nbsp;</div>
+						<div class=" text-center">
+							<input type="submit" class="btn btn-secondary" value="Save" >
+							&nbsp;
+							<input type="button" class="btn btn-secondary buttonCancel"  th:if="${pageTitle} == 'Edit'" value="Cancel">
+						</div>
+					</div>
+				</form>
+		</div>
+		
+		<div class="col-sm-8">
+			<div class="card">
+				<p class="fs-5 badge rounded-pill text-bg-info text-center text-wrap ">Lecture Room List</p>
+				<div class="row">
+					<div class="col-sm-8">
+						<div th:replace="fragments :: search_form"></div>
+					</div>
+					<div class="col-sm-4">
+					
+						<div class="form-group d-flex float-end mx-2">
+							
+								<i class="fas fa-print fa-2x"></i>
+								<i class="fas fa-copy fa-2x"></i>
+								<i class="fas fa-file-excel fa-2x"></i>
+							
+						</div>
+					</div>
+				</div>
+				<div class="full-details">
+					<table class="table table-bordered table-striped table-hover table-responsive{-sm|-md|-lg}">
+						<thead class="thead-dark text-center">
+							<tr>
+								<th class="hideable-column">Class</th>
+								<th class="hideable-column">Section</th>
+								<th class="hideable-column w-25">Action</th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr th:each="lectureroom : ${listLecturerooms}" >
+							
+								<td>[[${lectureroom.name}]]</td>
+								<!-- double brackets removes the  -->
+<!-- 								<td th:text="${#strings.replace(lectureroom.sections,',','')}"> -->
+<!-- 								<td id="rearrangeSection" th:text="${#strings.replace(#strings.replace(#strings.replace(lectureroom.sections, '[', ''), ']',''), ',', '')}">	 -->
+<!-- 									[[${#strings.replace(#strings.replace(#strings.replace(lectureroom.sections, '[', ''), ']',''), ',', '')}]] -->
+<!-- 								</td> -->
+								
+								<td>
+									<ol>
+										<li id="rearrangeSection">[[${#strings.replace(#strings.replace(#strings.replace(lectureroom.sections, '[', ''), ']',''), ',', '')}]]</li>
+									</ol>
+								</td>
+								
+								<td>
+									<div><a class="btn btn-success fa-solid fa-pen-to-square  " 
+									th:href="@{'/lecturerooms/edit/' + ${lectureroom.id}}"
+									
+									></a>
+									&nbsp;
+									<a class="btn btn-danger fa-solid fa-trash  link-delete"
+										th:href="@{'/lecturerooms/delete/' + ${lectureroom.id}}"
+										th:lectureId="${lectureroom.id}"></a></div>
+									
+									<!--
+										
+										<div th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})"></div>
+									<div th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)"></div>
+									 -->
+								</td>	
+							</tr>
+						
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+
+
+<div th:insert="fragments :: toast_fragment"></div>
+ 
+<div th:replace="modal_fragments :: confirm_modal"></div>
+
+</div>
+
+<script  th:inline="javascript" th:src="@{/js/toastMessage.js}"></script>
+<script type="text/javascript">
+moduleURL="[[@{/lecturerrooms}]]";
+placeHolder = "Search by class or section";
+		$(document).ready(function(){	
+		//for cancel button
+		$(".buttonCancel").on("click", function(){
+			window.location = "[[@{/lecturerooms}]]";
+		});
+		
+			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				//alert($(this).attr("href"));
+				link = $(this);
+				lectureId = link.attr("lectureId");
+				$("#yesButton").attr("href", link.attr("href"))
+				$("#confirmText").text("Are you sure you want to delete this classroom ID " + lectureId + " ?");
+				$("#confirmModal") //selects the modal dialog
+				.modal("show"); //show the modal
+				
+			});
+		});
+	</script>
+	
+</div>
+</body>
+</html>

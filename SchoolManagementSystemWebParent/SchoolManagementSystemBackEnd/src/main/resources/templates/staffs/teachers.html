@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout :: page_head('staffs','none')">
+
+</head>
+<body>
+<div layout:fragment="content" class="main-container">
+
+	<div class="card cardspace">
+	<div>
+			<a type="button" class="btn btn-primary fa-solid fa-user-plus link-add mb-2"
+			th:href="@{/staffs/new}"
+			> Add</a>
+	</div>
+	<div class="card card-body">
+		<table class="table table-bordered table-striped table-hover table-responsive-sm align-middle" id="tableRefresh">
+			<thead class="table-dark text-center">
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">First Name</th>
+					<th scope="col">Other Name</th>
+					<th scope="col">Last Name</th>
+					<th scope="col">Email</th>
+					<th scope="col">Role</th>
+					
+					<th width="50px">Edit</th>
+					<th width="50px">Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="staff : ${listStaff}" class="text-center">
+					<td th:text="${staff.id}"></td>
+					<td th:text="${staff.firstName}"></td>
+					<td>[[${staff.otherName}]]</td>
+					<td>[[${staff.lastName}]]</td>
+					<td>[[${staff.email}]]</td>
+					<td>[[${staff.roles}]]</td>
+					<td><a th:href="@{'/staffs/edit/' + ${staff.id}}" 
+					class="btn btn-success fa-solid fa-pen-to-square link-edit"></a></td>
+					<td><a href="#"><span class="btn btn-danger fa-solid fa-trash"></span></a></td>
+				</tr>
+			</tbody>
+		</table>
+	
+	</div>
+	
+	
+	<div class="modal fade" id="addModal">
+		<!-- modal-xl indicate extra-large modal dialog -->
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	
+	
+	
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//display staff category dropdown
+			
+			
+// 			$(".link-add").on("click", function (e) {
+// 				event.preventDefault();
+// 				linkDetailURL = $(this).attr("href");
+
+// 				//$("#editModal").show("show");
+// 				$("#addModal") //selects the modal dialog
+// 					.modal("show") //show the modal
+// 					.find(".modal-content") //finds the element modal-content
+// 					.load(linkDetailURL); //load the url for the selected customer
+// 			});
+			
+			showModalForm(".link-add","#addModal");
+			showModalForm(".link-edit","#addModal");
+		});
+	
+		function showModalForm(btnLink,modalLinkId){
+			$(btnLink).on("click", function (e) {
+				
+				event.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				
+// 				$(linkDetailURL.substring(linkDetailURL.lastIndexOf('/') + 1));
+				
+			$(modalLinkId) //selects the modal dialog
+					.modal("show") //show the modal
+					.find(".modal-content") //finds the element modal-content
+					.load(linkDetailURL); //load the url for the selected customer
+			});
+			
+		}
+	</script>
+	
+	</div>
+</div>
+</body>
+</html>
