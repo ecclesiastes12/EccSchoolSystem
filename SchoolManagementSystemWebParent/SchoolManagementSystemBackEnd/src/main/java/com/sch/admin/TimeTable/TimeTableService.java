@@ -20,9 +20,9 @@ public class TimeTableService {
 	}
 	
 	//service method that save time table
-	public TimeTable saveTimeTable(List<TimeTable> list) {
+	public TimeTable saveTimeTable(TimeTable timetable) {
 		
-		return timeTableRepo.save(list);
+		return timeTableRepo.save(timetable);
 	}
 	
 	//service that get time table by id
