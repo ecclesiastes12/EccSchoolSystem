@@ -3,7 +3,7 @@
 <div class="sidebar">
 	<div class="sidebar-menu">
 		<div class="profile">
-			<img src="images/spr.jpg" alt="">
+			<img th:src="@{/images/spr.jpg}" alt="">
 			<p>James</p>
 		</div>
 		<ul>
@@ -36,15 +36,15 @@
 				</span>
 			</a>
 				<ul class="sub-menu" id="btn1">
-					<li><a href="#"><i class="fas fa-image"></i><span>Student
+					<li><a th:href="@{/students}"><i class="fas fa-image"></i><span>Student
 								Details</span></a></li>
 					<li><a th:href="@{/students/new}"><i
 							class="fas fa-address-card"></i><span>Student Admission</span></a></li>
-					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
+					<li><a th:href="@{/students/report}"><i class="fa-solid fa-chart-line"></i><span>Student
 								Report</span></a></li>
-					<li><a href="#"><i class="fas fa-address-card"></i><span>Guardian
+					<li><a th:href="@{/parentguardian/report}"><i class="fas fa-address-card"></i><span>Guardian
 								Report</span></a></li>
-					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
+					<li><a th:href="@{/students/history}"><i class="fas fa-address-card"></i><span>Student
 								History</span></a></li>
 					<li><a href="#"><i class="fas fa-address-card"></i><span>Student
 								Login Credential</span></a></li>
@@ -62,7 +62,7 @@
 					<span>Acadamics <i class="fas fa-chevron-down drop-down"></i></span>
 			</a>
 				<ul class="sub-menu" id="btn2">
-					<li><a href="#"><i class="fas fa-envelope"></i><span>Class
+					<li><a th:href="@{/timetable}"><i class="fas fa-envelope"></i><span>Class
 								Timetable</span></a></li>
 					<li><a th:href="@{/assignTeachers}"><i class="fas fa-envelope-square"></i><span>Assign
 								Class Teacher</span></a></li>

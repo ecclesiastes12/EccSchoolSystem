@@ -22,6 +22,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -52,8 +55,8 @@ public class Student extends UserBasicInfo{
 	 * 
 	 * @Parameter(name = "increment_size", value = "1") } )
 	 */
-	@Column(name = "admission_number")
-	Long admissionNumber;
+	@Column(name = "admission_number", nullable = false)
+	String admissionNumber;
 	
 	@Column(name = "date_of_birth")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -76,14 +79,23 @@ public class Student extends UserBasicInfo{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date registrationDate;
 	
-	@ManyToOne
-	@JoinColumn(name = "lectureroom_id")
-	LectureRoom lectureRoom;
+//	@ManyToOne(cascade = CascadeType.REMOVE)
+//	@JoinColumn(name = "lectureroom_id")
+//	LectureRoom lectureRoom;
+	
+	@ManyToMany
+	@JoinTable(
+			name="student_lectureroom",
+			joinColumns = @JoinColumn(name="student_id"),
+			inverseJoinColumns=@JoinColumn(name="lectureroom_id")
+			)
+	Set<LectureRoom> lectureRoom;
 	
 	@ManyToOne
 	@JoinColumn(name = "section_id")
 	Section section;
 	
+	@Column(length= 64)
 	String photo;
 	
 	@JoinColumn(name = "admission_date")
@@ -108,7 +120,11 @@ public class Student extends UserBasicInfo{
 	
 	@OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
 	ParentGuardian parentGuardian;
-	
+
+	public Student(Integer id, String email) {
+		this.id = id;
+		this.email = email;
+	}
 
 	@Transient
 	public String getDobOnForm() {
@@ -161,5 +177,26 @@ public class Student extends UserBasicInfo{
 		}
 	}
 
+	@Transient
+	public String getFullName() {
+		return firstName + " " + otherName + " " + lastName;
+	}
+
+	@Transient
+	public String getStudentPhotoImagePath() {
+		if(id == null || photo == null) return "/images/default-user.png";
+		
+		return "/student-photos/" + this.id + "/" + this.photo;
+	}
+
+//	@Override
+//	public String toString() {
+//		return "Student admissionNumber=" + admissionNumber ;
+//	}
+
+//	//method that add lectureroom to student
+//	public void addLectureroom(LectureRoom lectureRoom) {
+//		this.lectureRoom.add(lectureRoom);
+//	}
 	
 }

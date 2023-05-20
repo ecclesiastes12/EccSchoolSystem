@@ -67,5 +67,50 @@
 			</div>
 		</div>
 	</div>
+	
+	#########################
+	 PAGINATION PAGE LINK AFTER
+	#########################
+	
+	<a th:fragment="page_link(pageNum,label)"
+		class="page-link"
+		th:href="@{'/students/page/' + ${pageNum}}">[[${label}]]</a>
+		
+		
+	#######################
+	column_link modified with moduleURL
+	######################
+	<!-- <th scope="col">
+		<a th:if="${sortField != 'admissionNumber'}" class="text-white"
+			th:href="@{'/students/' + ${currentPage} + '?sortField=admissionNumber&sortDir=' + ${sortDir}}">
+				Admission Number
+		</a> 
+		<a th:if="${sortField == 'admissionNumber'}" class="text-white"
+			th:href="@{'/students/page/' + ${currentPage} + '?sortField=admissionNumber&sortDir=' + ${reverseSortDir}}">
+				Admission Number
+		</a> 
+		<span th:if="${sortField == 'admissionNumber'}"
+			th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+	</th> -->
+	
+	<!-- Code After  this code will replace all the column headers in the student table page-->
+	<!-- NB the purpose of ${removeTag} is to remove or delete that tag where applicable.
+		this is used purposely to remove the column headers User ID and E-mail on medium screen
+		
+		th tag before removeTag
+		
+			<th th:fragment="column_link(fieldName,columnLable)">
+	-->
+	
+	<th th:fragment="column_link(fieldName,columnLable,removeTag)" th:remove="${removeTag}">
+		<a class="text-white"
+			th:href="@{'/students/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir}}">
+				[[${columnLable}]] 
+		</a> 
+		
+		<span th:if="${sortField == fieldName}"
+			th:class="${sortDir == 'asc' ? 'fa-solid fa-sort-up' : 'fa-solid fa-sort-down'}"></span>
+	</th>
+	
 </body>
 </html>

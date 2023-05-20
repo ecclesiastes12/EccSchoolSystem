@@ -1,34 +1,35 @@
 package com.sch.admin.student;
 
-import java.util.Collections;
-import java.util.Date;
+
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sch.admin.FileUploadUtil;
 import com.sch.admin.lectureroom.LectureroomService;
-import com.sch.admin.parentguardian.ParentGuardianNotFoundException;
+import com.sch.admin.parentguardian.ParentGuardianRepository;
 import com.sch.admin.parentguardian.ParentGuardianService;
 import com.sch.admin.schoolhouse.SchoolHouseService;
 import com.sch.admin.section.SectionService;
-import com.sch.common.entity.BloodGroup;
-import com.sch.common.entity.Gender;
 import com.sch.common.entity.LectureRoom;
 import com.sch.common.entity.ParentGuardian;
 import com.sch.common.entity.SchoolHouse;
 import com.sch.common.entity.Section;
 import com.sch.common.entity.Student;
-import com.sch.common.entity.StudentCategory;
-import com.sch.common.entity.StudentParentGuardianDTO;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class StudentController {
@@ -38,13 +39,110 @@ public class StudentController {
 	@Autowired SectionService sectionService;
 	@Autowired SchoolHouseService schoolHouseService;
 	@Autowired ParentGuardianService parentGuardianService;
+	@Autowired ParentGuardianRepository parentGuardianRepository;
 	
-	//handler method that list all student
+	/*
+	 * //handler method that list all student
+	 * 
+	 * @GetMapping("/students") public String
+	 * viewStudentDetails(@ModelAttribute("student") Student student, Model model) {
+	 * 
+	 * List<Student> listAllStudents = studentService.listStudents();
+	 * List<LectureRoom> listLectureRooms =
+	 * lectureroomService.listAllLectureRooms(null); List<Section> listSections =
+	 * sectionService.listAllSections();
+	 * 
+	 * model.addAttribute("listAllStudents", listAllStudents);
+	 * model.addAttribute("listLectureRooms", listLectureRooms);
+	 * model.addAttribute("listSections", listSections);
+	 * 
+	 * return "students/student_details"; }
+	 */
+	
+	
+	//viewStudentDetails change to listFirstPage and modified
 	@GetMapping("/students")
-	public String viewStudent(@ModelAttribute("student") Student student) {
+	public String listFirstPage(Model model) {
+		return listByPage(1, model,"admissionNumber","asc");
+	}
+	
+	/*
+	 * //handler method that list students by page
+	 * 
+	 * @GetMapping("/students/page/{pageNum}") public String
+	 * listByPage(@PathVariable(name = "pageNum") int pageNum, Model model) {
+	 * Page<Student> page = studentService.listByPage(pageNum); List<Student>
+	 * listAllStudents = page.getContent();
+	 * 
+	 * List<LectureRoom> listLectureRooms =
+	 * lectureroomService.listAllLectureRooms(null); List<Section> listSections =
+	 * sectionService.listAllSections();
+	 * 
+	 * //count pages long startCount = (pageNum - 1) *
+	 * StudentService.STUDENTS_PER_PAGE + 1; long endCount = startCount +
+	 * StudentService.STUDENTS_PER_PAGE - 1;
+	 * 
+	 * //gets the last page number if(endCount > page.getTotalElements()) { endCount
+	 * = page.getTotalElements(); }
+	 * 
+	 * model.addAttribute("listLectureRooms", listLectureRooms);
+	 * model.addAttribute("listSections", listSections);
+	 * 
+	 * model.addAttribute("listAllStudents", listAllStudents);
+	 * 
+	 * model.addAttribute("currentPage", pageNum); model.addAttribute("totalPages",
+	 * page.getTotalPages()); model.addAttribute("startCount", startCount);
+	 * model.addAttribute("endCount", endCount); model.addAttribute("totalItems",
+	 * page.getTotalElements());
+	 * 
+	 * return "students/student_details";
+	 * 
+	 * }
+	 */
+	
+	//handler method that list  students by page.
+	//method modified for column sorting
+	@GetMapping("/students/page/{pageNum}")
+	public String listByPage(@PathVariable(name = "pageNum") int pageNum, Model model,
+			@Param("sortField") String sortField,
+			@Param("sortDir") String sortDir) {
 		
+		List<LectureRoom> listLectureRooms = lectureroomService.listAllLectureRooms(null);
+		List<Section> listSections = sectionService.listAllSections();
 		
-		return "students/students";
+		Page<Student> page = studentService.listByPage(pageNum, sortField, sortDir);
+		
+		List<Student> listAllStudents = page.getContent();
+		
+		//count pages
+		long startCount = (pageNum - 1) * StudentService.STUDENTS_PER_PAGE + 1;
+		long endCount = startCount + StudentService.STUDENTS_PER_PAGE - 1;
+		
+		//gets the last page number
+		if(endCount > page.getTotalElements()) {
+			endCount = page.getTotalElements();
+		}
+		
+		//reverse sort
+		String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+
+		model.addAttribute("listLectureRooms", listLectureRooms);
+		model.addAttribute("listSections", listSections);
+		
+		model.addAttribute("listAllStudents", listAllStudents);
+		
+		model.addAttribute("currentPage", pageNum);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("startCount", startCount);
+		model.addAttribute("endCount", endCount);
+		model.addAttribute("totalItems", page.getTotalElements());
+		
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("sortDir", sortDir);
+		model.addAttribute("reverseSortDir", reverseSortDir);
+		
+		return "students/student_details";
+
 	}
 	
 	//handler method that display student form
@@ -56,7 +154,10 @@ public class StudentController {
 		List<Section> listSections = sectionService.listAllSections();
 		List<SchoolHouse> listSchoolHouses = (List<SchoolHouse>) schoolHouseService.listSchoolHouse();
 		
-		//model.addAttribute("student", new Student());
+		String generatedAdmissionNumber = studentService.generateAdmissionNumber();
+		
+		
+		model.addAttribute("generatedAdmissionNumber", generatedAdmissionNumber);
 		model.addAttribute("listLectureRooms", listLectureRooms);
 		model.addAttribute("listSections", listSections);
 		model.addAttribute("listSchoolHouses", listSchoolHouses);
@@ -64,194 +165,290 @@ public class StudentController {
 		return "students/student_admission";
 	}
 	
-//	//handler method that save students
-//	@PostMapping("/students/save")
-//	public String saveStudent(Student student, HttpServletRequest request) {
-//		String fatherName = request.getParameter("fatherName");
-//		String fatherOccupation = request.getParameter("fatherOccupation");
-//		String fatherPhoneNumber = request.getParameter("fatherPhoneNumber");
-//		String motherName = request.getParameter("motherName");
-//		String motherOccupation = request.getParameter("motherOccupation");
-//		String motherPhoneNumber = request.getParameter("motherPhoneNumber");
-//		String guardianName = request.getParameter("guardianName");
-//		String guardianRelation = request.getParameter("guardianRelation");
-//		String guardianOccupation = request.getParameter("guardianOccupation");
-//		String guardianEmail = request.getParameter("guardianEmail");
-//		String guardianPhoneNumber = request.getParameter("guardianPhoneNumber");
-//		String guardianAddress = request.getParameter("guardianAddress");
-//		String isGuardianFatherMotherOther = request.getParameter("isGuardianFatherMotherOther");
-//		String photo = request.getParameter("photo");
-//		
-//		
+
+	
+	
+	/*
+	 * //works perfectly without constraint parentGuardian email field //handler
+	 * method that save students
+	 * 
+	 * @PostMapping("/students/save") public String
+	 * saveStudent(@ModelAttribute("student") Student student){
+	 * 
+	 * studentService.saveStudent(student); ParentGuardian parentGuardian =
+	 * student.getParentGuardian(); parentGuardian.setStudent(student);
+	 * parentGuardianService.saveParentGuardian(parentGuardian);
+	 * 
+	 * return "redirect:/students/new"; }
+	 */
+	
+	
+//	@PostMapping("/students/save")	
+//	public String saveStudent(@ModelAttribute("student") Student student, @Param("guardianEmail") String email){
 //		
 //		studentService.saveStudent(student);
-//		
-//		return "students/student_admission";
+//		ParentGuardian parentGuardian = student.getParentGuardian();
+//		parentGuardian.setStudent(student);
+//		parentGuardianService.saveParentGuardian(parentGuardian);
+//
+//		return "redirect:/students/new";
 //	}
 	
-	//handler method that save students
-	@PostMapping("/students/save")
-	public String saveStudent(@RequestParam("admissionNumber") Long admissionNumber,
-			@RequestParam("firstName") String firstName,
-			@RequestParam("lastName") String lastName,
-			@RequestParam("otherName") String otherName,
-			@RequestParam("lectureRoom") LectureRoom lectureRoom,
-			@RequestParam("section") Section section,
-			@RequestParam("gender") Gender gender,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("dob") Date dob,
-			@RequestParam("studentCategory") StudentCategory studentCategory,
-			@RequestParam("caste") String caste,
-			@RequestParam("phoneNumber") String phoneNumber,
-			@RequestParam("email") String email,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("admissionDate") Date admissionDate,
-			@RequestParam("bloodGroup") BloodGroup bloodGroup,
-			@RequestParam("schoolHouse") SchoolHouse schoolHouse,
-			@RequestParam("height") String height,
-			@RequestParam("weight") String weight,
-			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam("registrationDate") Date registrationDate,
-			@RequestParam("parentGuardian.fatherPhoneNumber") String fatherName,
-			@RequestParam("parentGuardian.fatherPhoneNumber") String fatherPhoneNumber,
-			@RequestParam("parentGuardian.fatherOccupation") String fatherOccupation,
-			@RequestParam("parentGuardian.motherName") String motherName,
-			@RequestParam("parentGuardian.motherPhoneNumber") String motherPhoneNumber,
-			@RequestParam("parentGuardian.motherOccupation") String motherOccupation,
-			@RequestParam("parentGuardian.isGuardianFatherMotherOther") String isGuardianFatherMotherOther,
-			@RequestParam("parentGuardian.guardianName") String guardianName,
-			@RequestParam("parentGuardian.guardianRelation") String guardianRelation,
-			@RequestParam("parentGuardian.guardianEmail") String guardianEmail,
-			@RequestParam("parentGuardian.guardianPhoneNumber") String guardianPhoneNumber,
-			@RequestParam("parentGuardian.guardianOccupation") String guardianOccupation,
-			@RequestParam("parentGuardian.guardianAddress") String guardianAddress
-
-			) 
+	//modified with multipartfile for image upload
+	@PostMapping("/students/save")	
+	public String saveStudent(@ModelAttribute("student") Student student,
+			@RequestParam("image") MultipartFile multipartFile,
+			@RequestParam("fatherImage") MultipartFile fatherMultipartFile, 
+			@RequestParam("motherImage") MultipartFile motherMultipartFile,
+			@RequestParam("guardianImage") MultipartFile guardianMultipartFile,
+			RedirectAttributes ra) throws IOException{
+		String cleanedString = student.getAdmissionNumber().trim().replaceAll(",", "");
+		//check if the form has a file upload by checking the mulitpart file object
+		if(!multipartFile.isEmpty()) {//if the mulitpart file object is not empty it means the form has an upload file
+			//clean the path and get the file name from multipart file object
+			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			
-			{
-	
+			//set the phote field to store the file name in the db
+			student.setPhoto(fileName);
+					
+			//student.setAdmissionNumber(cleanedString);
+			
+			ParentGuardian parentGuardian = student.getParentGuardian();
+			parentGuardian.setStudent(student);
+			Student savedStudent = studentService.saveStudent(student);
+			
+			//upload directory, the folder that the actual image will be stored in
+			//this directory will be created with the student id
+			String uploadDir = "student-photos/" + savedStudent.getId();
+			
+			//clean image directory
+			FileUploadUtil.cleanDir(uploadDir);
+			
+			//save or upload the photo
+			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+			
+		}else {
+			if(student.getPhoto().isEmpty()) {
+				student.setPhoto(null);
+				student.setAdmissionNumber(cleanedString);
+				ParentGuardian parentGuardian = student.getParentGuardian();
+				parentGuardian.setStudent(student);
+				studentService.saveStudent(student);
+			}
+		}
 		
-		Student student = new Student();
-		student.setAdmissionNumber(admissionNumber);
-		student.setFirstName(firstName);
-		student.setLastName(lastName);
-		student.setOtherName(motherName);
-		student.setLectureRoom(lectureRoom);
-		student.setSection(section);
-		student.setGender(gender);
-		student.setDob(dob);
-		student.setStudentCategory(studentCategory);
-		student.setCaste(caste);
-		student.setEmail(email);
-		student.setPhoneNumber(guardianPhoneNumber);
-		student.setAdmissionDate(admissionDate);
-		student.setBloodGroup(bloodGroup);
-		student.setSchoolHouse(schoolHouse);
-		student.setHeight(height);
-		student.setWeight(weight);
-		student.setRegistrationDate(registrationDate);
+		if(!fatherMultipartFile.isEmpty()) {//if the mulitpart file object is not empty it means the form has an upload file
+			//clean the path and get the file name from multipart file object
+			String fatherFileName = StringUtils.cleanPath(fatherMultipartFile.getOriginalFilename());
+			
+			//set the phote field to store the file name in the db
+			student.getParentGuardian().setFatherPhoto(fatherFileName);
+						
+			student.setAdmissionNumber(cleanedString);
+			ParentGuardian parentGuardian = student.getParentGuardian();
+			parentGuardian.setStudent(student);
+			Student savedStudent = studentService.saveStudent(student);
+			
+			//upload directory, the folder that the actual image will be stored in
+			//this directory will be created with the student id
+			String uploadFatherDir = "father-photos/" + savedStudent.getParentGuardian().getId();
+			
+			//clean image directory
+			FileUploadUtil.cleanDir(uploadFatherDir);
+			
+			//save or upload the photo
+			FileUploadUtil.saveFile(uploadFatherDir, fatherFileName, fatherMultipartFile);
+			
+		}else {
+			if (student.getParentGuardian().getFatherPhoto().isEmpty()) {
+				student.getParentGuardian().setFatherPhoto(null);
+				student.setAdmissionNumber(cleanedString);
+				ParentGuardian parentGuardian = student.getParentGuardian();
+				parentGuardian.setStudent(student);
+				studentService.saveStudent(student);
+			}
+		}
 		
-		ParentGuardian parentGuardian = new ParentGuardian();
-		parentGuardian.setFatherName(fatherName);
-		parentGuardian.setFatherOccupation(fatherOccupation);
-		parentGuardian.setIsGuardianFatherMotherOther(isGuardianFatherMotherOther);
-		parentGuardian.setMotherName(motherName);
-		parentGuardian.setMotherOccupation(motherOccupation);
-		parentGuardian.setMotherPhoneNumber(motherPhoneNumber);
-		parentGuardian.setIsGuardianFatherMotherOther(isGuardianFatherMotherOther);
-		parentGuardian.setGuardianAddress(guardianAddress);
-		parentGuardian.setGuardianEmail(guardianEmail);
-		parentGuardian.setGuardianName(guardianName);
-		parentGuardian.setGuardianOccupation(guardianOccupation);
-		parentGuardian.setGuardianPhoneNumber(guardianPhoneNumber);
-		parentGuardian.setGuardianRelation(guardianRelation);
+		if(!motherMultipartFile.isEmpty()) {//if the mulitpart file object is not empty it means the form has an upload file
+			//clean the path and get the file name from multipart file object
+			String motherFileName = StringUtils.cleanPath(motherMultipartFile.getOriginalFilename());
+			
+			//set the phote field to store the file name in the db
+			student.getParentGuardian().setMotherPhoto(motherFileName);
+						
+			student.setAdmissionNumber(cleanedString);
+			ParentGuardian parentGuardian = student.getParentGuardian();
+			parentGuardian.setStudent(student);
+			Student savedStudent = studentService.saveStudent(student);
+			
+			//upload directory, the folder that the actual image will be stored in
+			//this directory will be created with the student id
+			String uploadMotherDir = "mother-photos/" + savedStudent.getParentGuardian().getId();
+			
+			//clean image directory
+			FileUploadUtil.cleanDir(uploadMotherDir);
+			
+			//save or upload the photo
+			FileUploadUtil.saveFile(uploadMotherDir, motherFileName, motherMultipartFile);
+			
+		}else {
+			if (student.getParentGuardian().getMotherPhoto().isEmpty()) {
+				student.getParentGuardian().setMotherPhoto(null);
+				student.setAdmissionNumber(cleanedString);
+				ParentGuardian parentGuardian = student.getParentGuardian();
+				parentGuardian.setStudent(student);
+				studentService.saveStudent(student);
+			}
+		}
 		
-		student.setParentGuardian(parentGuardian);
-		parentGuardian.setStudent(student);
+		if(!guardianMultipartFile.isEmpty()) {//if the mulitpart file object is not empty it means the form has an upload file
+			//clean the path and get the file name from multipart file object
+			String guardianFileName = StringUtils.cleanPath(guardianMultipartFile.getOriginalFilename());
+			
+			//set the phote field to store the file name in the db
+			student.getParentGuardian().setGuardianPhoto(guardianFileName);
+						
+			student.setAdmissionNumber(cleanedString);
+			ParentGuardian parentGuardian = student.getParentGuardian();
+			parentGuardian.setStudent(student);
+			Student savedStudent = studentService.saveStudent(student);
+			
+			//upload directory, the folder that the actual image will be stored in
+			//this directory will be created with the student id
+			String uploadGuardianDir = "guardian-photos/" + savedStudent.getParentGuardian().getId();
+			
+			//clean image directory
+			FileUploadUtil.cleanDir(uploadGuardianDir);
+			
+			//save or upload the photo
+			FileUploadUtil.saveFile(uploadGuardianDir, guardianFileName, guardianMultipartFile);
+			
+		} else {
+
+			if (student.getParentGuardian().getGuardianPhoto().isEmpty()) {
+				student.getParentGuardian().setGuardianPhoto(null);
+				
+				student.setAdmissionNumber(cleanedString);
+				ParentGuardian parentGuardian = student.getParentGuardian();
+				parentGuardian.setStudent(student);
+				studentService.saveStudent(student);
+			}
+			
+		}
 		
-		studentService.saveStudent(student);
-		
+			
+			
+
+		ra.addFlashAttribute("message", "The Student has been saved successfully!");
 		
 		return "redirect:/students/new";
 	}
 	
 	
-//	//handler method that save students
-//	@PostMapping("/students/save")
-//	public String saveStudent(@ModelAttribute("studentParentGuardianDto") StudentParentGuardianDTO studentParentGuardianDto ) 
-//			throws StudentNotFoundException, ParentGuardianNotFoundException 
-//			{
-//		
-////		ParentGuardian parentGuardian = student.getParentGuardian();
-////		
-////		studentService.saveStudent(student);
-////		
-////		parentGuardian.getStudent().add(student);
-////		
-////		parentGuardianService.saveParentGuardian(parentGuardian);
-//		
-//		setStudentAndParentGuardian(studentParentGuardianDto);
-//		
-//		
-//		return "redirect:/students/new";
-//	}
-	
-	//private method  that set students and parentGuardian
-		private void setStudentAndParentGuardian(StudentParentGuardianDTO studentParentGuardianDTO) 
-				
-				{
-			ParentGuardian parentGuardian = new ParentGuardian();
-
-			parentGuardian.setIsGuardianFatherMotherOther(studentParentGuardianDTO.getIsGuardianFatherMotherOther());
-			//parentGuardian.setStudent(studentParentGuardianDTO.getStudentEntityObject());;
-			parentGuardian.setFatherName(studentParentGuardianDTO.getFatherName());
-			parentGuardian.setFatherOccupation(studentParentGuardianDTO.getFatherOccupation());
-			parentGuardian.setFatherPhoneNumber(studentParentGuardianDTO.getFatherPhoneNumber());
-			parentGuardian.setMotherName(studentParentGuardianDTO.getMotherName());
-			parentGuardian.setMotherOccupation(studentParentGuardianDTO.getMotherOccupation());
-			parentGuardian.setMotherPhoneNumber(studentParentGuardianDTO.getMotherPhoneNumber());
-			parentGuardian.setGuardianName(studentParentGuardianDTO.getGuardianName());
-			parentGuardian.setGuardianEmail(studentParentGuardianDTO.getGuardianEmail());
-			parentGuardian.setGuardianOccupation(studentParentGuardianDTO.getGuardianOccupation());
-			parentGuardian.setGuardianRelation(studentParentGuardianDTO.getGuardianRelation());
-			parentGuardian.setGuardianAddress(studentParentGuardianDTO.getGuardianAddress());
-			parentGuardian.setGuardianPhoneNumber(studentParentGuardianDTO.getGuardianPhoneNumber());
-									
-			Student student = new Student();
+	//handler method that edit student
+	@GetMapping("/students/edit/{id}")
+	public String editStudent(@PathVariable("id") Integer id, 
+		RedirectAttributes ra, Model model) {
+		
+		//get student by id
+		try {
+			Student student = studentService.getStudentId(id);
+			List<LectureRoom> listLectureRooms = lectureroomService.listAllLectureRooms(null);
+			List<Section> listSections = sectionService.listAllSections();
+			List<SchoolHouse> listSchoolHouses = (List<SchoolHouse>) schoolHouseService.listSchoolHouse();
 			
-			student.setAdmissionNumber(studentParentGuardianDTO.getAdmissionNumber());
-			student.setFirstName(studentParentGuardianDTO.getFirstName());
-			student.setLastName(studentParentGuardianDTO.getLastName());
-			student.setOtherName(studentParentGuardianDTO.getOtherName());
-			student.setEmail(studentParentGuardianDTO.getEmail());
-			student.setGender(studentParentGuardianDTO.getGender());
-			//student.setPassword(studentParentGuardianDTO.getPassword());
-			student.setDobOnForm(studentParentGuardianDTO.getGetDobOnForm());
-			student.setReligion(studentParentGuardianDTO.getReligion());
-			student.setCaste(studentParentGuardianDTO.getCaste());
-			student.setWeight(studentParentGuardianDTO.getWeight());
-			student.setHeight(studentParentGuardianDTO.getHeight());
-			student.setPhoneNumber(studentParentGuardianDTO.getPhoneNumber());
-			student.setHomeTown(studentParentGuardianDTO.getHomeTown());
-			student.setEthnicGroup(studentParentGuardianDTO.getEthnicGroup());
-			student.setBloodGroup(studentParentGuardianDTO.getBloodGroup());
-			student.setRegistrationDate(studentParentGuardianDTO.getRegistrationDate());
-			student.setLectureRoom(studentParentGuardianDTO.getLectureRoom());
-			student.setSection(studentParentGuardianDTO.getSection());
-			student.setAdmissionDateOnForm(studentParentGuardianDTO.getGetAdmissionDateOnForm());
-			student.setRegistrationDateOnForm(studentParentGuardianDTO.getGetRegistrationDateOnForm());
-			student.setStudentCategory(studentParentGuardianDTO.getStudentCategory());
-			student.setSchoolHouse(studentParentGuardianDTO.getSchoolHouse());
-			//student.setParentGuardian(parentGuardian);
-						student.setParentGuardian(studentParentGuardianDTO.getParentGuardian());
-			//parentGuardian.setStudent(Collections.singletonList(student));			
+			model.addAttribute("student", student);
+			model.addAttribute("listLectureRooms", listLectureRooms);
+			model.addAttribute("listSections", listSections);
+			model.addAttribute("listSchoolHouses", listSchoolHouses);
 			
-			parentGuardianService.saveParentGuardian(parentGuardian);
-			studentService.saveStudent(student);	
-			
-			
+		} catch (StudentNotFoundException e) {
+			ra.addFlashAttribute("message", e.getMessage());
 		}
 		
+		return "students/student_admission";
+	}
 	
-	
+	//handler to delete student
+	@GetMapping("/students/delete/{id}")
+	public String deleteStudent(@PathVariable("id") Integer id, RedirectAttributes ra) {
+		try {
+			studentService.deleteStudent(id);
+		} catch (StudentNotFoundException e) {
+			ra.addFlashAttribute("message", e.getMessage());
+		}
 		
-	//handler method that update students
+		return "redirect:/students";
+	}
 	
+	//method handler that show student profile details
+	@GetMapping("/students/profile/{id}")
+	public String studentProfileDetails(@PathVariable(name = "id") Integer id, 
+			Model model, RedirectAttributes ra) {
+		try {
+			Student student = studentService.getStudentId(id);
+			//List<Student> listAllStudents = studentService.listStudents();
+			model.addAttribute("student", student);
+			//model.addAttribute("listAllStudents", listAllStudents);
+		} catch (StudentNotFoundException e) {
+			ra.addFlashAttribute("message", e.getMessage());
+		}
+		
+		return "students/student_profile";
+	}
+		
+	
+	  //handler method that students report
+	  
+		@GetMapping("/students/history")
+		public String viewStudentHistory(Model model) {
+
+			return listPageByStudentHistory(1, model, "admissionNumber", "desc");
+		}
+	 
+	
+		@GetMapping("/students/history/page/{pageNum}")
+		public String listPageByStudentHistory(@PathVariable(name = "pageNum") int pageNum, Model model,
+				@Param("sortField") String sortField,
+				@Param("sortDir") String sortDir) {
+			
+			List<LectureRoom> listLectureRooms = lectureroomService.listAllLectureRooms(null);
+			List<Section> listSections = sectionService.listAllSections();
+			
+			Page<Student> page = studentService.listByPage(pageNum, sortField, sortDir);
+			
+			List<Student> listAllStudents = page.getContent();
+			
+			//count pages
+			long startCount = (pageNum - 1) * StudentService.STUDENTS_PER_PAGE + 1;
+			long endCount = startCount + StudentService.STUDENTS_PER_PAGE - 1;
+			
+			//gets the last page number
+			if(endCount > page.getTotalElements()) {
+				endCount = page.getTotalElements();
+			}
+			
+			//reverse sort
+			String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
+
+			model.addAttribute("listLectureRooms", listLectureRooms);
+			model.addAttribute("listSections", listSections);
+			
+			model.addAttribute("listAllStudents", listAllStudents);
+			
+			model.addAttribute("currentPage", pageNum);
+			model.addAttribute("totalPages", page.getTotalPages());
+			model.addAttribute("startCount", startCount);
+			model.addAttribute("endCount", endCount);
+			model.addAttribute("totalItems", page.getTotalElements());
+			
+			model.addAttribute("sortField", sortField);
+			model.addAttribute("sortDir", sortDir);
+			model.addAttribute("reverseSortDir", reverseSortDir);
+			
+			return "students/student_history";
+
+		}
+		
+		
 }

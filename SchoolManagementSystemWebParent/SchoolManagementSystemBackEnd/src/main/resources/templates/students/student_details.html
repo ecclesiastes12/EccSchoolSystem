@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+	
+<head th:insert="../fragments/main_layout :: page_head('staffs','none')">
+<body>
+<div layout:fragment="content" class="main-container">
+		<div class="card cardspace">
+				<div  class="bg-secondary d-flex justify-content-between">
+				<span class="fs-5 fw-5 text-white"><i class=" fa-solid fa-user-plus me-2"></i>Student Admission</span>
+				<button type="button" class="btn btn-secondary ">Import Student</button>
+			</div>
+			
+			<div class="card card-body shadow mb-3 searchForm">
+				<div class="row">
+					<div class="col">
+						<form action="">
+						<div class="row ms-auto">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="coursecode">Class</label> 
+									<select class="form-select">
+										<th:block  th:each="lec : ${listLectureRooms}">
+											<option th:value="${lec.id}">[[${lec.name}]]</option>
+										</th:block>
+									</select>
+	
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="coursecode">Section</label> 
+									<select class="form-select">
+										<th:block  th:each="csec : ${listSections}">
+											<option th:value="${csec.id}">[[${csec.name}]]</option>
+										</th:block>
+											
+									</select>
+	
+								</div>
+							</div>
+	
+						</div>
+						<div class="form-group  pt-3 d-flex justify-content-end">
+							<button type="submit"
+								class="btn btn-outline-secondary fa-solid fa-magnifying-glass">Search</button>
+						</div>
+					</form>
+					</div>
+					<div class="col">
+						<form action="">
+						<div class="row ms-auto">
+							<div >
+								<div class="form-group">
+									<label for="coursecode">Search by Keyword</label> <input type="search"
+										class="form-control" id="coursecode">
+	
+								</div>
+							</div>
+	
+						</div>
+						<div class="form-group  pt-3 d-flex justify-content-end">
+							<button type="submit"
+								class="btn btn-outline-secondary fa-solid fa-magnifying-glass ">Search</button>
+						</div>
+					</form>
+					</div>
+				</div>
+			</div>
+			
+			<div class="card card-body">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link active" id="student_list_tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true"><i class="fa-solid fa-list me-2"></i></i>List View</button>
+				  </li>
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link" id="student_deital_tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false"><i class="fa-brands fa-microsoft fa-sm me-2"></i>Detail View</button>
+				  </li>
+				  
+				</ul>
+				<div class="tab-content" id="myTabContent">
+				  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+				  	<div th:replace="students/student_list_view :: content"></div>
+				  </div>
+				  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+				   	<div th:replace="students/student_detail_view :: content"></div>
+				  </div>
+				  
+				</div>
+			</div>
+			
+			
+		<script>
+		$(document).ready(function(){
+			$("#student_deital_tab").on("click", function(){
+				$(".searchForm").addClass("d-none");
+			});
+			$("#student_list_tab").on("click", function(){
+				$(".searchForm").removeClass("d-none");
+			});
+		});
+		</script>	
+			
+			
+		</div>
+</div>
+</body>
+</html>

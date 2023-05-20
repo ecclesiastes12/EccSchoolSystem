@@ -66,10 +66,13 @@ public class LectureRoom extends IdBaseEntity{
 
 
 
+//		@Override
+//		public String toString() {
+//			return "LectureRoom [name=" + name + ", sections=" + sections + "]";
+//		}
+		
 		@Override
 		public String toString() {
-			return "LectureRoom [name=" + name + ", sections=" + sections + "]";
+			return this.name;
 		}
-		
-	
 }

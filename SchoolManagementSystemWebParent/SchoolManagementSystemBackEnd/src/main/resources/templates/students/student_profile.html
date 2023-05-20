@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+	
+<head th:insert="../fragments/main_layout :: page_head('staffs','none')">
+<body>
+<body>
+<div layout:fragment="content" class="main-container">
+	<div class="card cardspace">
+		<div  class="bg-secondary d-flex justify-content-between">
+			<span class="fs-5 fw-5 text-white"><i class=" fa-solid fa-user-plus me-2"></i>Student Admission</span>
+			<a th:href="@{/students}" class="fa-solid fa-bars pe-2 pt-2"></a>
+		</div>
+	<div th:fragment="content">
+		<div class="row mt-2">
+			<div class="col-4">
+				<div class="card card-body shadow mb-3 align-middle">
+					<div class="profile text-center" >
+						<img th:src="@{${student.studentPhotoImagePath}}" alt="" class="rounded-circle img-fluid w-40 mb-2">
+						<p>[[${student.fullName}]]</p>
+					</div>
+					
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Admission Number</label>
+						<div>[[${student.admissionNumber}]]</div>
+						
+					</div>
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Class</label>
+						<div>[[${student.lectureRoom.name}]]</div>
+						
+					</div>
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Section</label>
+						<div>[[${student.section}]]</div>
+						
+					</div>
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Gender</label>
+						<div>[[${student.gender}]]</div>
+						
+					</div>
+					
+				</div>
+				<div class="card card-body shadow mb-3">
+				sdfs
+				</div>
+			</div>
+			<div class="col-8">
+			<div class="card card-body shadow mb-3">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link active" id="student_list_tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Profile</button>
+				  </li>
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link" id="student_deital_tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Fee</button>
+				  </li>
+				   <li class="nav-item" role="presentation">
+				    <button class="nav-link " id="student_list_tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Exam</button>
+				  </li>
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link" id="student_deital_tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Document</button>
+				  </li>
+				   <li class="nav-item" role="presentation">
+				    <button class="nav-link " id="student_list_tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Timeline</button>
+				  </li>
+				  
+				</ul>
+				<div class="tab-content" id="myTabContent">
+				  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+				  	<div class="card card-body mt-2 shadow">
+				  		
+						<div class="form-group d-flex justify-content-between border-bottom">
+							<label>Admission Date</label>
+							<div th:text="${#dates.format(student.admissionDate, 'yyyy-MM-dd')}"></div>
+							
+						</div>
+						<div class="form-group d-flex justify-content-between border-bottom">
+							<label>Date of Birth</label>
+							<div th:text="${#dates.format(student.dob, 'yyyy-MM-dd')}"></div>
+							
+						</div>
+						<div class="form-group d-flex justify-content-between border-bottom">
+							<label>Category</label>
+							<div>[[${student.studentCategory}]]</div>
+							
+						</div>
+						<div class="form-group d-flex justify-content-between border-bottom">
+							<label>Caste</label>
+							<div>[[${student.caste}]]</div>
+							
+						</div>
+						<div class="form-group d-flex justify-content-between border-bottom">
+							<label>Religion</label>
+							<div>[[${student.religion}]]</div>
+							
+						</div>
+						<div class="form-group d-flex justify-content-between border-bottom">
+							<label>Email</label>
+							<div>[[${student.email}]]</div>
+							
+						</div>
+				  	</div>
+				  </div>
+				  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+				   
+				  </div>
+				  
+				</div>
+				
+				<div class="card card-body shadow">
+					<div  class="bg-secondary d-flex justify-content-between">
+						<span class="fs-5 fw-5 text-white "> Address</span>
+					</div>
+				</div>
+			 
+				<div class="card card-body shadow">
+					<div  class="bg-secondary d-flex justify-content-between">
+						<span class="fs-5 fw-5 text-white "> Parent / Guardian</span>
+					</div>
+					<div class="row">
+						<div class="col-9">
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Father Name</label>
+								<div >[[${student.parentGuardian.fatherName}]]</div>
+								
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Father Phone</label>
+								<div >[[${student.parentGuardian.fatherPhoneNumber}]]</div>							
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Father Occupation</label>
+								<div>[[${student.parentGuardian.fatherOccupation}]]</div>
+								
+							</div>
+						</div>
+						
+						<div class="col-3 text-center">
+							<img alt="" th:src="@{${student.parentGuardian.fatherPhotoImagePath}}"
+							 class="img-fluid rounded-circle" style="max-width: 100px">
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-9">
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Mother Name</label>
+								<div >[[${student.parentGuardian.motherName}]]</div>
+								
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Mother Phone</label>
+								<div >[[${student.parentGuardian.motherPhoneNumber}]]</div>							
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Mother Occupation</label>
+								<div>[[${student.parentGuardian.motherOccupation}]]</div>
+								
+							</div>
+						</div>
+						<div class="col-3 text-center">
+							<img alt="" th:src="@{${student.parentGuardian.motherPhotoImagePath}}"
+							 class="img-fluid rounded-circle" style="max-width: 100px">
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-9">
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Guardian Email</label>
+								<div>[[${student.parentGuardian.guardianEmail}]]</div>
+								
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Guardian Relation</label>
+								<div>[[${student.parentGuardian.guardianRelation}]]</div>
+								
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Guardian Phone</label>
+								<div>[[${student.parentGuardian.guardianPhoneNumber}]]</div>
+								
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Guardian Occupation</label>
+								<div>[[${student.parentGuardian.guardianOccupation}]]</div>
+								
+							</div>
+							<div class="form-group d-flex justify-content-between border-bottom">
+								<label>Guardian Address</label>
+								<div>[[${student.parentGuardian.guardianAddress}]]</div>
+								
+							</div>
+						</div>
+						<div class="col-3 text-center">
+							<img alt="" th:src="@{${student.parentGuardian.guardianPhotoImagePath}}"
+							 class="img-fluid rounded-circle" style="max-width: 100px">
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="card card-body shadow">
+					<div  class="bg-secondary d-flex justify-content-between">
+						<span class="fs-5 fw-5 text-white "> Miscellaneous Details</span>
+					</div>
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Blood Group</label>
+						<div >[[${student.bloodGroup}]]</div>
+						
+					</div>
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Student House</label>
+						<div >[[${student.schoolHouse.name}]]</div>							
+					</div>
+					<div class="form-group d-flex justify-content-between border-bottom">
+						<label>Height</label>
+						<div>[[${student.height}]]</div>
+						
+					</div>
+					
+						
+				
+				</div>
+			</div>
+			
+			
+			
+			</div>
+		
+		
+		
+		</div>
+	</div>	
+	</div>	
+	</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout :: page_head('staffs','none')">
+
+</head>
+<body>
+<div layout:fragment="content" class="main-container">
+<i class="fa-solid fa-chart-line me-2"></i><span>Report</span>
+<div class="card card-body shadow mb-3 searchForm border border-2 border-start-0 border-bottom-0 border-end-0 border-info">
+<label class=" mb-2"><i class="fa-solid fa-search me-2"></i>Select Criteria</label>
+	<div class="row">
+		<div class="col">
+			<form action="">
+			<div class="row ms-auto">
+				<div class="col">
+					<div class="form-group">
+						<label for="coursecode">Class</label> 
+						<select class="form-select">
+							<th:block  th:each="lec : ${listLectureRooms}">
+								<option th:value="${lec.id}">[[${lec.name}]]</option>
+							</th:block>
+						</select>
+	
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+						<label for="coursecode">Admission Year</label> 
+						<select class="form-select">
+							<th:block  th:each="csec : ${listSections}">
+								<option th:value="${csec.id}">[[${csec.name}]]</option>
+							</th:block>
+								
+						</select>
+	
+					</div>
+				</div>
+				
+			</div>
+			<div class="form-group  pt-3 d-flex justify-content-end">
+				<button type="submit"
+					class="btn btn-outline-secondary fa-solid fa-magnifying-glass">Search</button>
+			</div>
+			</form>
+		</div>
+		
+	</div>
+</div>	
+
+
+<div class="card card-body shadow border border-2 border-start-0 border-bottom-0 border-end-0 border-info">
+<label class=" mb-2"><i class="fa-solid fa-users me-2"></i>Student History</label>
+
+<table class="table ">
+	
+	<thead>
+					<tr>
+						
+						<th scope="col">
+							Admission Number
+						</th>
+						<th scope="col">Student Name</th>
+						<th scope="col">Admission Date</th>
+						<th scope="col">Class(Start - End)</th>
+						<th scope="col">Session(Start - End)</th>
+						<th scope="col">Year</th>
+						<th scope="col">Mobile Number</th>
+						<th scope="col">Guardian Name</th>
+						<th scope="col">Guardian Phone</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="student : ${listAllStudents}">
+						<td>[[${student.admissionNumber}]]</td>
+						<td>
+							<a th:href="@{'/students/profile/' + ${student.id}}" data-toggle="tab" data-target="#profile-tab-pane">[[${student.fullName}]]</a>
+						</td>
+						<td th:text="${#dates.format(student.admissionDate, 'yyyy-MM-dd')}"></td>
+						<td>[[${student.lectureRoom.name}]]</td>
+						
+						<td>fhfh</td>
+						<td>Year</td>
+						<td>[[${student.phoneNumber}]]</td>
+						<td>[[${student.parentGuardian.guardianName}]]</td>
+						<td>[[${student.parentGuardian.guardianPhoneNumber}]]</td>
+						
+					</tr>
+					
+				</tbody>
+	
+	
+</table>
+
+</div>
+			
+
+
+
+
+
+</div>
+</body>
+</html>

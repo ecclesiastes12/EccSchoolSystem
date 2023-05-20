@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+	<div th:fragment="content">
+		<div class="row mt-2">
+				
+			<div class="col-sm-8">
+				<div th:insert="fragments :: search_form"></div>
+			</div>
+			
+			<div class="col-sm-4">
+				<div class="form-group d-flex float-end mx-2 ">
+					<i class="fas fa-print fa-3x pe-2" style="color: red;"></i>
+					<i class="fas fa-copy fa-3x pe-2" style="color: blue;"></i>
+					<i class="fas fa-file-excel fa-3x pe-2" style="color: green;"></i>
+				</div>
+			</div>
+		</div>
+		
+		<div>
+			<table class="table table-bordered table-striped table-hover table-responsive-sm align-middle" id="tableRefresh">
+				<thead class="table-dark text-center">
+					<tr>
+<!-- 						<th scope="col"> -->
+<!-- 							<a th:if="${sortField != 'admissionNumber'}" class="text-white" -->
+<!-- 								th:href="@{'/students/page/' + ${currentPage} + '?sortField=admissionNumber&sortDir=' + ${sortDir}}"> -->
+<!-- 									Admission Number -->
+<!-- 							</a>  -->
+<!-- 							<a th:if="${sortField == 'admissionNumber'}" class="text-white" -->
+<!-- 								th:href="@{'/students/page/' + ${currentPage} + '?sortField=admissionNumber&sortDir=' + ${reverseSortDir}}"> -->
+<!-- 									Admission Number -->
+<!-- 							</a>  -->
+		
+<!-- 							<span th:if="${sortField == 'admissionNumber'}" -->
+<!-- 								th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span> -->
+											
+<!-- 						</th> -->
+						
+						<th scope="col" th:replace="fragments :: column_link('admissionNumber','Admission Number','none')">
+								
+						</th>
+<!-- 						<th scope="col"> -->
+<!-- 							<a th:if="${sortField != 'firstName'}" class="text-white" -->
+<!-- 								th:href="@{'/students/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${sortDir}}"> -->
+<!-- 									Student Name -->
+<!-- 							</a>  -->
+<!-- 							<a th:if="${sortField == 'firstName'}" class="text-white" -->
+<!-- 								th:href="@{'/students/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}"> -->
+<!-- 									Student Name -->
+<!-- 							</a>  -->
+		
+<!-- 							<span th:if="${sortField == 'firstName'}" -->
+<!-- 								th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span> -->
+<!-- 						</th> -->
+						
+						<th scope="col" th:replace="fragments :: column_link('firstName','Student Name','none')">
+							
+						</th>
+						<th th:replace="fragments :: column_link('lectureRoom','Class','none')"></th>
+						
+						<th scope="col" th:replace="fragments :: column_link('parentGuardian.fatherName','Father Name','none')"></th>
+						<th scope="col" th:replace="fragments :: column_link('dob','Date of Birth','none')"></th>
+						<th scope="col">Gender</th>
+						<th scope="col" th:replace="fragments :: column_link('studentCategory','Category','none')">Category</th>
+						<th scope="col">Mobile Number</th>
+						
+						<th width="50px">Edit</th>
+						<th width="50px">Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="student : ${listAllStudents}">
+						<td>[[${student.admissionNumber}]]</td>
+						<td>
+							<a th:href="@{'/students/profile/' + ${student.id}}" data-toggle="tab" data-target="#profile-tab-pane">[[${student.fullName}]]</a>
+						</td>
+						<td>[[${#strings.replace(#strings.replace(student.lectureRoom,'[', ''), ']', '') }]]</td>
+						<td>[[${student.parentGuardian.fatherName}]]</td>
+						<td th:text="${#dates.format(student.dob, 'yyyy-MM-dd')}"></td>
+						<td>[[${student.gender}]]</td>
+						<td>[[${student.studentCategory}]]</td>
+						<td>[[${student.phoneNumber}]]</td>
+						<td><a th:href="@{'/students/edit/' + ${student.id}}" 
+					class="btn btn-success fa-solid fa-pen-to-square link-edit"></a></td>
+					<td><a th:href="@{'/students/delete/' + ${student.id}}" class="btn btn-danger fa-solid fa-trash link-delete"
+					
+					th:studentId="${student.id}"></a></td>
+						
+					</tr>
+					
+				</tbody>
+				
+			</table>
+		</div>
+		
+		<div th:replace="modal_fragments :: confirm_modal"></div>
+		<div th:replace="page_pagination :: pagination('students')"></div>
+		
+		<script th:src="@{/js/common_list.js}"></script>
+		
+	<script  th:inline="javascript" th:src="@{/js/toastMessage.js}"></script>
+	<script type="text/javascript">
+		
+		$(".link-delete").on("click", function(e){
+			
+			e.preventDefault();
+			link = $(this);
+			studentId = link.attr("studentId");
+			$("#yesButton").attr("href", link.attr("href"));
+			$("#confirmText").text("Are you sure you want to delete Student ID " + studentId + "?");
+			$("#confirmModal").modal("show");
+			
+		});
+	</script>
+	</div>
+</body>
+</html>

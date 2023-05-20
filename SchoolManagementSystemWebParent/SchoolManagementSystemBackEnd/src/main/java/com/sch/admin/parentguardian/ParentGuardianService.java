@@ -27,4 +27,11 @@ public class ParentGuardianService {
 			throw new ParentGuardianNotFoundException("Could not find ParentGuardian ID " + id);
 		}
 	}
+	
+	//service method that find email of a guardian
+	public boolean isEmailUnique(String email) {
+		ParentGuardian parentGuardianByEmail = parentGuardianRepo.findParentGuardianByEmail(email);
+		
+		return parentGuardianByEmail == null;
+	}
 }

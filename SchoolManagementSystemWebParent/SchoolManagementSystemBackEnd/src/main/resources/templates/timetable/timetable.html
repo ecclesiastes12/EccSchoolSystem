@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{../fragments/main_layout}">
+<head th:insert="../fragments/main_layout :: page_head('staffs','none')">
+
+</head>
+<body>
+<div layout:fragment="content" class="main-container">
+
+	<div class="card card-body shadow mb-3 searchForm">
+		<div class="row">
+			<div class="col">
+				<form action="">
+				<div class="row ms-auto">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="coursecode">Class</label> 
+							<select class="form-select">
+								<th:block  th:each="lec : ${listLectureRooms}">
+									<option th:value="${lec.id}">[[${lec.name}]]</option>
+								</th:block>
+							</select>
+
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="coursecode">Section</label> 
+							<select class="form-select">
+								<th:block  th:each="csec : ${listSections}">
+									<option th:value="${csec.id}">[[${csec.name}]]</option>
+								</th:block>
+									
+							</select>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group  pt-3 d-flex justify-content-end">
+					<button type="submit"
+						class="btn btn-outline-secondary fa-solid fa-magnifying-glass">Search</button>
+				</div>
+			</form>
+			</div>
+		</div>
+		</div>
+		
+		<div class="card cardspace">
+	<div>
+			<a type="button" class="btn btn-primary fa-solid fa-user-plus link-add mb-2"
+			th:href="@{/timetable/new}"
+			> Add</a>
+	</div>
+	<div class="card card-body">
+		<table class="table table-bordered table-striped table-hover table-responsive-sm align-middle" id="tableRefresh">
+			<thead class="table-dark text-center">
+				<tr>
+					<th scope="col">Subject</th>
+					<th scope="col">Monday</th>
+					<th scope="col">Tuesday</th>
+					<th scope="col">Wednesday</th>
+					<th scope="col">Thursday</th>
+					<th scope="col">Friday</th>
+					<th scope="col">Saturday</th>
+					<th scope="col">Sunday</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+
+				
+			</tbody>
+		</table>
+	
+	</div>
+</div>
+</body>
+</html>

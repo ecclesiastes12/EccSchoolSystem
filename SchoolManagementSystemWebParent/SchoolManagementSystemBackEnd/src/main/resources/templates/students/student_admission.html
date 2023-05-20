@@ -9,28 +9,45 @@
 <div layout:fragment="content" class="main-container">
 
 	<div class="card cardspace">
-	<form th:action="@{/students/save}" th:object="${student}" method="post">
+	<div  class="bg-secondary d-flex justify-content-between">
+		<span class="fs-5 fw-5">Student Admission</span>
+		<button type="button" class="btn btn-secondary ">Import Student</button>
+	</div>
+	<form th:action="@{/students/save}" th:object="${student}" method="post"
+		enctype="multipart/form-data"
+		onsubmit="return checkStudentEmailUniqueness(this);">
 		<div class="shadow p-3 mb-4 bg-body rounded">
-			<div  class="bg-secondary">
-				<span class="fs-5 fw-5">Student Admission</span>
-				<button type="button" class="btn btn-secondary ">Import Student</button>
-			</div>
+			
 			<div class="card card-body ">
+			
+				<input type="hidden" th:field="*{id}" >
 				<div class="row ">
 					
-					<div class="form-group col">
-						<label class="col-form-label">Admission Number</label>
-						
-							<input type="text"  class="form-control" th:field="*{admissionNumber}"
-								required="required">
-						
-					</div>
+					<th:block th:if="${id == null}">
+						<div class="form-group col" >
+							<label class="col-form-label">Admission Number</label>
+							
+								<input type="text"  class="form-control" id="admissionNumber" name="admissionNumber" th:value="${generatedAdmissionNumber}"
+									required="required" readonly>
+						</div>
+					
+					</th:block>
+					
+					<th:block th:if="${id != null}">
+						<div class="form-group col" >
+							<label class="col-form-label">Admission Number</label>
+							
+								<input type="text"  class="form-control" th:field="*{admissionNumber}"
+									required="required" readonly>
+						</div>
+					</th:block>
+					
 					
 					<div class="form-group col">
 						<label class="col-form-label">First Name</label>
 						<div class="">
 							<input type="text"  class="form-control"
-								th:field="*{firstName}">
+								th:field="*{firstName}" >
 						</div>
 					</div>
 					<div class="form-group col">
@@ -133,6 +150,7 @@
 								th:field="*{email}">
 						</div>
 					</div>
+					
 				</div>
 				
 				<div class="row ">
@@ -144,14 +162,6 @@
 								th:field="*{admissionDate}">
 						</div>
 					</div>
-					
-<!--					<div class="form-group col">-->
-<!--						<label class="col-form-label">Student Photo</label>-->
-<!--						<div class="">-->
-<!--							<input type="text"  class="form-control"-->
-<!--								required="required">-->
-<!--						</div>-->
-<!--					</div>-->
 					
 					<div class="form-group col">
 						<label class="col-form-label">Blood Group</label>
@@ -170,6 +180,26 @@
 							</th:block>
 								
 						</select>
+					</div>
+					
+					<div class="form-group col">
+						<label class="col-form-label">Student Photo</label>
+						<!-- hidden field that store photos -->
+						<input type="hidden" th:field="*{photo}">
+						<div class="">
+							<input type="file"  class="form-control" name="image"
+								id="fileImage" accept="image/png, image/jpeg, image/jpg">								
+						</div>
+					</div>
+					<!--<div class="form-group col-sm-2 mt-2">
+						<img id="thumbnail" class="img-fluid" style="max-width: 75px"
+						alt="Photos preview" th:src="@{/images/default-user.png}">						
+					</div>-->
+					
+					<div class="form-group col-sm-2 mt-2">
+						<img id="thumbnail" class="img-fluid " style="max-width: 75px"
+						alt="Photo preview" th:src="@{${student.studentPhotoImagePath}}">	
+											
 					</div>
 				</div>
 				
@@ -218,7 +248,7 @@
 			</div>
 			<div class="card card-body ">
 				<div class="row ">
-					
+					<input type="hidden" th:field="*{parentGuardian.id}" />
 					<div class="form-group col">
 						<label class="col-form-label">Father Name</label>
 						
@@ -243,13 +273,25 @@
 						</div>
 					</div>
 					
-<!-- 					<div class="form-group col"> -->
-<!-- 						<label class="col-form-label">Father photo</label> -->
-<!-- 						<div class=""> -->
-<!-- 						<input type="file"  class="form-control" -->
-<!-- 								id="formFile"> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
+ 					<div class="form-group col"> 
+ 						<label class="col-form-label">Father photo</label> 
+ 						<!-- hidden field that store photos -->
+						<input type="hidden" th:field="*{parentGuardian.fatherPhoto}">
+ 						<div class=""> 
+ 						<input type="file"  class="form-control"  name="fatherImage"
+ 								id="fatherFileImage"> 
+ 						</div> 
+ 					</div> 
+<!--  					<div class="form-group col-sm-2">  -->
+<!--  						<img id="fatherThumbnail" class="img-fluid" style="max-width: 75px"  -->
+<!--  						alt="Photos preview" th:src="@{/images/default-user.png}">						  -->
+<!--  					</div>  -->
+ 					
+ 					<div class="form-group col-sm-2 mt-2">
+						<img id="fatherThumbnail" class="img-fluid" style="max-width: 75px"
+						alt="Photo preview" th:src="@{${student.parentGuardian.fatherPhotoImagePath}}">	
+											
+					</div>
 				</div>
 			
 			<div class="row ">
@@ -278,40 +320,63 @@
 						</div>
 					</div>
 					
-<!-- 					<div class="form-group col"> -->
-<!-- 						<label class="col-form-label">Mother Photo</label> -->
-<!-- 						<div class=""> -->
-<!-- 							<input type="file"  class="form-control" -->
-<!-- 								id="formFile"> -->
-<!-- 						</div> -->
+ 					<div class="form-group col"> 
+ 						<label class="col-form-label">Mother Photo</label> 
+ 						<input type="hidden" th:field="*{parentGuardian.motherPhoto}">
+ 						<div class=""> 
+ 							<input type="file"  class="form-control" name="motherImage"
+ 								id="motherFileImage"> 
+ 						</div> 
+ 					</div> 
+<!--  					<div class="form-group col-sm-2"> -->
+<!-- 						<img id="motherThumbnail" class="img-fluid" style="max-width: 75px" -->
+<!-- 						alt="Photos preview" th:src="@{/images/default-user.png}">						 -->
 <!-- 					</div> -->
+
+						<div class="form-group col-sm-2 mt-2">
+							<img id="motherThumbnail"  class="img-fluid" style="max-width: 75px"
+							alt="Photo preview" th:src="@{${student.parentGuardian.motherPhotoImagePath}}">	
+						</div>
 				</div>
 				
 				<div class="row ">
 					
-					<div class="form-group col">
-						<label class="col-form-label me-3">If Guardian is </label>
-						<div class="form-check form-check-inline">
-							<input type="radio"  class="form-check-input fatherRadio"
-								th:value="${Father}" th:field="*{parentGuardian.isGuardianFatherMotherOther}">
-							<label class="form-check-label">Father</label>	
-						</div>
-						<div class="form-check form-check-inline">
-							<input type="radio"  class="form-check-input motherRadio"
-								th:value="${Mother}" th:field="*{parentGuardian.isGuardianFatherMotherOther}">
-							<label class="form-check-label">Mother</label>	
-						</div>
-						<div class="form-check form-check-inline">
-							<input type="radio"  class="form-check-input otherRadio" 
-								th:value="${Other}" th:field="*{parentGuardian.isGuardianFatherMotherOther}">
-							<label class="form-check-label">Other</label>	
+					<div class="form-group row">
+<!-- 						<label class="col-form-label me-3">If Guardian is </label>  -->
+<!-- 						<div class="form-check form-check-inline"> -->
+<!-- 							<input type="radio"  class="form-check-input fatherRadio" -->
+<!-- 								value="Father" th:field="*{parentGuardian.isGuardianFatherMotherOther}"> -->
+<!-- 							<label class="form-check-label">Father</label>	 -->
+<!-- 						</div> -->
+<!-- 						<div class="form-check form-check-inline"> -->
+<!-- 							<input type="radio"  class="form-check-input motherRadio" -->
+<!-- 								value="Mother" th:field="*{parentGuardian.isGuardianFatherMotherOther}"> -->
+<!-- 							<label class="form-check-label">Mother</label>	 -->
+<!-- 						</div> -->
+<!-- 						<div class="form-check form-check-inline"> -->
+<!-- 							<input type="radio"  class="form-check-input otherRadio"  -->
+<!-- 								value="Other" th:field="*{parentGuardian.isGuardianFatherMotherOther}"> -->
+<!-- 							<label class="form-check-label">Other</label>	 -->
+<!-- 						</div> -->
+						
+						
+						<label class="col-form-label">If Guardian is</label>
+							<div class="col-sm-9 btn-group" >
+								<th:block th:each="gurdianFM : ${T(com.sch.common.entity.IsGuradianFatherOrMotherOrOther).values()}">
+										<input class="form-check-input me-2" type="radio" 
+											th:field="*{parentGuardian.isGuardianFatherMotherOther}" th:value="${gurdianFM}">
+										<span class="form-check-label me-2" 
+											th:for="${#ids.prev('parentGuardian.isGuardianFatherMotherOther')}" >[[${gurdianFM}]]</span>
+									
+								</th:block>
+							</div>
 						</div>
 						
-					</div>
+					
 					
 				</div>
 				
-				<div class="forRadio d-none">
+				<div class="forRadio">
 					<div class="row ">
 					
 					<div class="form-group col">
@@ -338,13 +403,22 @@
 						</div>
 					</div>
 					
-<!-- 					<div class="form-group col"> -->
-<!-- 						<label class="col-form-label">Guardian Photo</label> -->
-<!-- 						<div class=""> -->
-<!-- 							<input type="file"  class="form-control" -->
-<!-- 								id="formFile"> -->
-<!-- 						</div> -->
+					<div class="form-group col">
+						<label class="col-form-label">Guardian Photo</label>
+						<input type="hidden" th:field="*{parentGuardian.guardianPhoto}">
+						<div class="">
+							<input type="file"  class="form-control" name="guardianImage"
+								id="guardianFileImage">
+						</div>
+					</div>
+<!-- 					<div class="form-group col-sm-2"> -->
+<!-- 						<img id="guardianThumbnail" class="img-fluid" style="max-width: 75px" -->
+<!-- 						alt="Photos preview" th:src="@{/images/default-user.png}">						 -->
 <!-- 					</div> -->
+					<div class="form-group col-sm-2 mt-2">
+						<img id="guardianThumbnail"  class="img-fluid" style="max-width: 75px"
+						alt="Photo preview" th:src="@{${student.parentGuardian.guardianPhotoImagePath}}">	
+					</div>
 				</div>
 				
 				<div class="row ">
@@ -383,32 +457,186 @@
 		</div>
 		
 			<div class="text-center">
-				<button type="submit" class="btn btn-outline-primary">SAVE</button>
+				<button type="submit" class="btn btn-outline-primary" >SAVE</button>
 			</div>
 		
 		</form>
-		
+		<div th:replace="fragments :: modal_dialog"></div>
 	</div>
-	
+	<script th:src="@{/js/common_modal.js}"></script>
 	<script>
+	contextPath = "[[@{/}]]";
+	
 		//code to make COD button visible when radio button is checked
 		$(document).ready(function() {
 		
-			$(".fatherRadio").on("click", function(){
-				//removes the css class d-none to make the button visible
-				$(".forRadio").addClass("d-none");
-			});
-			$(".motherRadio").on("click", function(){
-				//removes the css class d-none to make the button visible
-				$(".forRadio").addClass("d-none");
-			});
-			$(".otherRadio").on("click", function(){
-				//removes the css class d-none to make the button visible
-				$(".forRadio").removeClass("d-none");
-			});
+// 			$(".fatherRadio").on("click", function(){
+// 				//removes the css class d-none to make the button visible
+// 				$(".forRadio").addClass("d-none");
+// 			});
+// 			$(".motherRadio").on("click", function(){
+// 				//removes the css class d-none to make the button visible
+// 				$(".forRadio").addClass("d-none");
+// 			});
+// 			$(".otherRadio").on("click", function(){
+// 				//removes the css class d-none to make the button visible
+// 				$(".forRadio").removeClass("d-none");
+// 			});
+
+
+/* 			$('input[type="radio"]').on("click",function() {
+				if(($(".fatherRadio").is(":checked")) || ($(".motherRadio").is(":checked"))){
+					//removes the css class d-none to make the button visible
+					$(".forRadio").addClass("d-none");
+				}else{
+					//removes the css class d-none to make the button visible
+					$(".forRadio").removeClass("d-none");
+				}
+            }); */
+
+
+			/* $('input[type="radio"]').on("click",function() {
+				if($(".otherRadio").is(":checked")){
+					//removes the css class d-none to make the button visible
+					$(".forRadio").removeClass("d-none");
+					
+				}else{
+					//removes the css class d-none to make the button visible
+					$(".forRadio").addClass("d-none");
+				}
+            }); */
+			
+//             $('input[type="radio"]').on("click",function() {
+// 				if($(".otherRadio").is(":checked")){
+// 					//removes the css class d-none to make the button visible
+// 					$(".forRadio").fadeIn('slow');
+					
+// 				}else{
+// 					//removes the css class d-none to make the button visible
+// 					$(".forRadio").fadeOut('slow');
+// 				}
+//             });
+            
+            $('input[name="parentGuardian.isGuardianFatherMotherOther"]').on("click",function() {
+            	var selectedRadio = $('input[name="parentGuardian.isGuardianFatherMotherOther"]:checked').val();
+				if(selectedRadio == "Other"){
+					//removes the css class d-none to make the button visible
+					$(".forRadio").fadeIn('slow');
+					
+				}else{
+					//removes the css class d-none to make the button visible
+					$(".forRadio").fadeOut('slow');
+				}
+            });
+            
+            var selectedRadioOnUpdate = $('input[name="parentGuardian.isGuardianFatherMotherOther"]:checked').val();
+	         if(($("#parentGuardian.id") != null && selectedRadioOnUpdate == "Father") || ($("#parentGuardian.id") != null && selectedRadioOnUpdate == "Mother")){
+	        	$("#parentGuardian.guardianName").val("");
+	        	$("#parentGuardian.guardianRelation").val("");
+	        	$("#parentGuardian.guardianOccupation").val("");
+	        	$("#parentGuardian.guardianEmail").val("");
+	        	$("#parentGuardian.guardianPhoneNumber").val("");
+	        	$("#parentGuardian.guardianAddress").val("");
+        	
+			}
+            
+	         changedFileImage("#fileImage","#thumbnail");
+	         changedFileImage("#fatherFileImage","#fatherThumbnail");
+	         changedFileImage("#motherFileImage","#motherThumbnail");
+	         changedFileImage("#guardianFileImage","#guardianThumbnail");
+			
+			
+			
 			
 		});
+		
+		
+		
+		
+		function checkStudentEmailUniqueness(form){
+		
+		/*url for checking Duplicate Email in the StudentRestController*/
+ 		url = "[[@{/students/check_unique_email}]]"; 
+ 		 
+ 		
+ 		
+ 		
+ 		studentEmail = $("#email").val(); 
+ 		studentId = $("#id").val();
+ 		csrfValue = $("input[name='_csrf']").val();
+ 		params = {id: studentId, email: studentEmail, _csrf: csrfValue};
+ 		
+ 		
+ 		$.post(url, params, function(response){
+ 			if(response == "OK"){
+ 				form.submit();
+ 			}else if(response == "Duplicated"){
+ 			  showWarningModal("There is another user having the email " + studentEmail);
+ 			}else{
+ 				showErrorModal("Unknown response from server");
+ 			}
+ 		}).fail(function(){
+ 			showModalDialog("Error","Could not connect to the server");
+ 		});
+ 		return false;
+			
+		}
+	 	
+// 		//function for image thumbnail
+// 		showImageThumbnail = (fileInput) =>{
+// 			//js code for displaying the image thumbnail
+// 			let file = fileInput.files[0]; //select the first file object
+// 			let reader = new FileReader(); // new file reader object
+// 			reader.onload =( (e) =>{
+// 				$("#thumbnail").attr("src", e.target.result);
+// 			});
+			
+// 			/* //this one also works
+// 			reader.onload =function(e){
+// 				$("#thumbnail").attr("src", e.target.result);
+// 			}; */
+			
+// 			reader.readAsDataURL(file);
+// 		}
 	
+	
+	//function for image thumbnail
+		showImageThumbnail = (fileInput,thumbnail) =>{
+			//js code for displaying the image thumbnail
+			let file = fileInput.files[0]; //select the first file object
+			let reader = new FileReader(); // new file reader object
+			reader.onload =( (e) =>{
+				$(thumbnail).attr("src", e.target.result);
+			});
+			
+			/* //this one also works
+			reader.onload =function(e){
+				$("#thumbnail").attr("src", e.target.result);
+			}; */
+			
+			reader.readAsDataURL(file);
+		}
+		
+		
+		function changedFileImage(fileImage,thumbnail1){
+			//for displaying the selected image
+			$(fileImage).change(function(){
+				
+				//check image file size before loading the image
+				fileSize = this.files[0].size;
+				
+			if(fileSize > 1048576){
+				//set customer validation of the picture size
+				this.setCustomValidity("You must choose an image less than 1mb");
+				this.reportValidity();
+			}else{
+				this.setCustomValidity("")
+				//NB this used here represent fileInput used in the showImageThumbnail function
+				showImageThumbnail(this, thumbnail1);
+			}
+				
+			});
+		}
 	</script>
 </div>
 </body>
