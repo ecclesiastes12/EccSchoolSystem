@@ -34,13 +34,7 @@ public class TimeTableController {
 		//TimeTable timeTable = new TimeTable();
 		List<TimeTable> rows = new ArrayList<>();
 		
-//		rows.add(new TimeTable("Monday", "", "", null));
-//		rows.add(new TimeTable("Tuesday", "", "", null));
-//		rows.add(new TimeTable("Wednesday", "", "", null));
-//		rows.add(new TimeTable("Thusday", "", "", null));
-//		rows.add(new TimeTable("Friday", "", "", null));
-//		rows.add(new TimeTable("Saturday", "", "", null));
-//		rows.add(new TimeTable("Sunday", "", "", null));
+
 		
 		rows.add(new TimeTable("Monday", null, null, null));
 		rows.add(new TimeTable("Tuesday", null, null, null));
@@ -63,7 +57,7 @@ public class TimeTableController {
 	@PostMapping("/timetable/save")
 	public String saveTimetable(@ModelAttribute("timeTableForm") TimeTableForm timeTableForm) {
 		
-			timeTableService.saveTimeTable(timeTableForm.getRows());
+			timeTableService.saveTimeTable(timeTableForm);
 		
 		
 		return "redirect:/timetable";
